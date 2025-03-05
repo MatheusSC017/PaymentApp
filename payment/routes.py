@@ -6,7 +6,8 @@ import hashlib
 import os
 
 payment_bp = Blueprint('payment', __name__, template_folder='templates')
-SECRET_KEY = os.environ.get("PAYMENT_SECRET_KEY")
+PRIVATE_KEY = os.environ.get("PAYMENT_PRIVATE_KEY")
+PUBLIC_KEY = os.environ.get("PAYMENT_PUBLIC_KEY")
 MP_PUBLIC_KEY = os.environ.get("PAYMENT_MP_PUBLIC_KEY")
 
 
@@ -17,6 +18,10 @@ def index():
     identification_type = request.form.get('identificationType')
     identification_number = request.form.get('identificationNumber')
     email = request.form.get('email')
+
+    if (amount == '' or description == '' or identification_type not in ('CPF', 'CNPJ') or
+            identification_number == '' or email == ''):
+        return jsonify({'error': 'Invalid parameters'}), 400
 
     return render_template('index.html', amount=amount, description=description, email=email,
                            identification_type=identification_type, identification_number=identification_number,
@@ -43,7 +48,7 @@ def payment():
 
         data = request.get_json()
         purchase_data = data["payer"]["email"] + "|" + data["description"] + "|" + str(data["transaction_amount"])
-        idempotency_key = hmac.new(SECRET_KEY.encode("utf-8"), purchase_data.encode("utf-8"), hashlib.sha256)
+        idempotency_key = hmac.new(PRIVATE_KEY.encode("utf-8"), purchase_data.encode("utf-8"), hashlib.sha256)
 
         request_options = mercadopago.config.RequestOptions()
         request_options.custom_headers = {
@@ -79,4 +84,4 @@ def payment():
 
 @payment_bp.route('/checkout', methods=['GET', ])
 def checkout():
-    return render_template('checkout.html')
+    return render_template('checkout.html', public_key=PUBLIC_KEY)
