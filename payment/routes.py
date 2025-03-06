@@ -1,13 +1,14 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
 import mercadopago
-import hmac
-import hashlib
 import os
+import base64
 
 payment_bp = Blueprint('payment', __name__, template_folder='templates')
-PRIVATE_KEY = os.environ.get("PAYMENT_PRIVATE_KEY")
-PUBLIC_KEY = os.environ.get("PAYMENT_PUBLIC_KEY")
+PRIVATE_KEY = os.environ.get("PAYMENT_PRIVATE_KEY").replace('\\n', '\n')
+PUBLIC_KEY = os.environ.get("PAYMENT_PUBLIC_KEY").replace('\\n', '\n')
 MP_PUBLIC_KEY = os.environ.get("PAYMENT_MP_PUBLIC_KEY")
 
 
@@ -23,9 +24,15 @@ def index():
             identification_number == '' or email == ''):
         return jsonify({'error': 'Invalid parameters'}), 400
 
+    public_key = RSA.importKey(PUBLIC_KEY)
+    cipher = PKCS1_OAEP.new(public_key)
+
+    purchase_identification = identification_type + "," + identification_number + "," + email + "," + description + "," + amount
+    cipher_purchase = cipher.encrypt(purchase_identification.encode("utf-8"))
+
     return render_template('index.html', amount=amount, description=description, email=email,
                            identification_type=identification_type, identification_number=identification_number,
-                           payment_mp_public_key=MP_PUBLIC_KEY)
+                           payment_mp_public_key=MP_PUBLIC_KEY, purchase_identification=base64.b64encode(cipher_purchase))
 
 
 @payment_bp.route('/payment_response', methods=['GET', ])
@@ -47,12 +54,23 @@ def payment():
             return jsonify({"error": "Invalid request format. Expected JSON"}), 400
 
         data = request.get_json()
-        purchase_data = data["payer"]["email"] + "|" + data["description"] + "|" + str(data["transaction_amount"])
-        idempotency_key = hmac.new(PRIVATE_KEY.encode("utf-8"), purchase_data.encode("utf-8"), hashlib.sha256)
+
+        private_key = RSA.importKey(PRIVATE_KEY)
+        cipher = PKCS1_OAEP.new(private_key)
+
+        purchase_identification = cipher.decrypt(base64.b64decode(data["purchase_identification"])).decode("utf8")
+        purchase_identification = purchase_identification.split(",")
+
+        if (purchase_identification[0] != data["payer"]["identification"]["type"] or
+            purchase_identification[1] != data["payer"]["identification"]["number"] or
+            purchase_identification[2] != data["payer"]["email"] or
+            purchase_identification[3] != data["description"] or
+            str(purchase_identification[4]) != str(data["transaction_amount"])):
+            return jsonify({'error': 'Invalid parameters'}), 400
 
         request_options = mercadopago.config.RequestOptions()
         request_options.custom_headers = {
-            'x-idempotency-key': idempotency_key.hexdigest()
+            'x-idempotency-key': data["purchase_identification"]
         }
 
         payment_data = {
@@ -84,4 +102,4 @@ def payment():
 
 @payment_bp.route('/checkout', methods=['GET', ])
 def checkout():
-    return render_template('checkout.html', public_key=PUBLIC_KEY)
+    return render_template('checkout.html')

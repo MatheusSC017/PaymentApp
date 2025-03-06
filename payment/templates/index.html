@@ -25,6 +25,7 @@
         const paymentData = {
             amount: "{{ amount }}",
             description: "{{ description }}",
+            purchase_identification: "{{ purchase_identification }}",
         };
 
         const mp = new MercadoPago("{{ payment_mp_public_key }}");
@@ -120,6 +121,7 @@
                                     number: identificationNumber,
                                 },
                             },
+                            purchase_identification: paymentData.purchase_identification,
                         }),
                     });
 
