@@ -14,7 +14,7 @@
         <select id="form-checkout__issuer"></select>
         <select id="form-checkout__installments"></select>
         <select id="form-checkout__identificationType"></select>
-        <input type="text" id="form-checkout__identificationNumber" value="{{ identification_number }}"/>
+        <input type="text" id="form-checkout__identificationNumber" value="{{ identificationNumber }}"/>
         <input type="email" id="form-checkout__cardholderEmail" value="{{ email }}" />
 
         <button type="submit" id="form-checkout__submit">Pagar</button>
@@ -82,8 +82,7 @@
 
                         if (options.length > 1) {
                             clearInterval(waitForOptions);
-                            const identificationType = "{{ identification_type }}";
-                            identificationTypeField.value = identificationType;
+                            identificationTypeField.value = "{{ identificationType }}";
                             identificationTypeField.dispatchEvent(new Event('change'));
                         }
                     }, 500);
