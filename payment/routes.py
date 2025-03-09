@@ -1,6 +1,8 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
 from payment.payment.card import Card
+from time import sleep
+import mercadopago
 
 
 payment_bp = Blueprint('payment', __name__, template_folder='templates')
@@ -41,8 +43,15 @@ def handle_payment():
             return jsonify({'error': 'Invalid parameters'}), 400
 
         payment_response = CARD_PAYMENT.process_payment(data)
-        if payment_response.get('status') == "in_process":
-            pass
+
+        i = 0
+        while payment_response.get('status') == "in_process" or i == 5:
+            sleep(1)
+            request_options = mercadopago.config.RequestOptions()
+            request_options.custom_headers = {'x-idempotency-key': data["purchase_identification"]}
+
+            payment_response = CARD_PAYMENT.MP_SDK.payment().get(payment_response.get('id'), request_options)["response"]
+            i += 1
 
         return jsonify(payment_response), 200
     except ValueError as e:

@@ -12,7 +12,7 @@ class Card:
     PUBLIC_KEY = RSA.importKey(os.environ.get("PAYMENT_PUBLIC_KEY").replace('\\n', '\n'))
     PUBLIC_CIPHER = PKCS1_OAEP.new(PUBLIC_KEY)
 
-    MP_PRIVATE_KEY = os.environ.get("PAYMENT_MP_PRIVATE_KEY")
+    MP_SDK = mercadopago.SDK(os.environ.get("PAYMENT_MP_PRIVATE_KEY"))
     MP_PUBLIC_KEY = os.environ.get("PAYMENT_MP_PUBLIC_KEY")
 
     def encrypt_data(self, purchase_identification):
@@ -39,7 +39,6 @@ class Card:
         return ",".join(ordered_fields)
 
     def process_payment(self, data):
-        sdk = mercadopago.SDK(self.MP_PRIVATE_KEY)
         request_options = mercadopago.config.RequestOptions()
         request_options.custom_headers = {'x-idempotency-key': data["purchase_identification"]}
 
@@ -58,7 +57,7 @@ class Card:
             },
         }
 
-        response = sdk.payment().create(payment_data, request_options)
+        response = self.MP_SDK.payment().create(payment_data, request_options)
         return response["response"]
 
     @staticmethod
