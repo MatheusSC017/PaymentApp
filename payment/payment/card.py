@@ -60,6 +60,12 @@ class Card:
         response = self.MP_SDK.payment().create(payment_data, request_options)
         return response["response"]
 
+    def get_payment(self, payment_id, purchase_identification):
+        request_options = mercadopago.config.RequestOptions()
+        request_options.custom_headers = {'x-idempotency-key': purchase_identification}
+
+        return self.MP_SDK.payment().get(payment_id, request_options)["response"]
+
     @staticmethod
     def validate_purchase_data(decrypted_data, request_data):
         expected_data = [
