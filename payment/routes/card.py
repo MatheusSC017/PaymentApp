@@ -4,11 +4,11 @@ from payment.payment.card import Card
 from time import sleep
 
 
-payment_bp = Blueprint('payment', __name__, template_folder='templates')
+card_bp = Blueprint('card', __name__, template_folder='templates')
 CARD_PAYMENT = Card()
 
 
-@payment_bp.route('/', methods=['POST', ])
+@card_bp.route('/card/', methods=['POST', ])
 def payment():
     form_data = {key: request.form.get(key, '').strip() for key in
                  ['amount', 'description', 'identificationType', 'identificationNumber', 'email']}
@@ -20,14 +20,14 @@ def payment():
         purchase_identification = CARD_PAYMENT.build_purchase_identification(form_data)
         cipher_purchase = CARD_PAYMENT.encrypt_data(purchase_identification)
 
-        return render_template('index.html', **form_data,
+        return render_template('card.html', **form_data,
                                payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY,
                                purchase_identification=cipher_purchase)
     except Exception as e:
         return jsonify({'error': 'Encryption failed', 'details': str(e)}), 500
 
 
-@payment_bp.route('/process_payment', methods=['POST'])
+@card_bp.route('/card/process_payment', methods=['POST'])
 def handle_payment():
     try:
         if not request.is_json:
@@ -59,11 +59,11 @@ def handle_payment():
         return jsonify({"error": "Internal server error"}), 500
 
 
-@payment_bp.route('/payment_response', methods=['GET', ])
+@card_bp.route('/card/payment_response', methods=['GET', ])
 def payment_response():
-    return render_template('response.html')
+    return render_template('successful.html')
 
 
-@payment_bp.route('/payment_error', methods=['GET', ])
+@card_bp.route('/card/payment_error', methods=['GET', ])
 def payment_error():
     return render_template('error.html')

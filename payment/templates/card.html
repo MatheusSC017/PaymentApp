@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Card</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -101,7 +101,7 @@
                         identificationType,
                     } = cardForm.getCardFormData();
 
-                    const response = await fetch("/process_payment", {
+                    const response = await fetch("/card/process_payment", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -127,9 +127,9 @@
                     const paymentResult = await response.json();
 
                     if (paymentResult.status === "approved") {
-                        window.location.href = "/payment_response";
+                        window.location.href = "/card/payment_response";
                     } else {
-                        window.location.href = "/payment_error";
+                        window.location.href = "/card/payment_error";
                     }
                 }
             },
