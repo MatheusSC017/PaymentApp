@@ -18,7 +18,7 @@
               </div>
               <div>
                     <label for="email">E-mail</label>
-                    <input id="form-checkout__email" name="email" type="text">
+                    <input id="form-checkout__email" name="email" type="text" value="{{ email }}" >
               </div>
               <div>
                     <label for="identificationType">Tipo de documento</label>
@@ -26,14 +26,14 @@
               </div>
               <div>
                     <label for="identificationNumber">Número do documento</label>
-                    <input id="form-checkout__identificationNumber" name="identificationNumber" type="text">
+                    <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" value="{{ identificationNumber }}">
               </div>
         </div>
 
         <div>
               <div>
-                    <input type="hidden" name="transactionAmount" id="transactionAmount" value="100">
-                    <input type="hidden" name="description" id="description" value="Nome do Produto">
+                    <input type="hidden" name="transactionAmount" id="transactionAmount" value="{{ amount }}">
+                    <input type="hidden" name="description" id="description" value="{{ description }}">
                     <br>
                     <button type="submit">Pagar</button>
               </div>
@@ -50,6 +50,16 @@
                     const identificationTypeElement = document.getElementById('form-checkout__identificationType');
 
                     createSelectOptions(identificationTypeElement, identificationTypes);
+
+                    const waitForOptions = setInterval(() => {
+                        const options = [...identificationTypeElement.options].map(o => o.value);
+
+                        if (options.length > 1) {
+                            clearInterval(waitForOptions);
+                            identificationTypeElement.value = "{{ identificationType }}";
+                            identificationTypeElement.dispatchEvent(new Event('change'));
+                        }
+                    }, 500);
               } catch (e) {
                     return console.error('Error getting identificationTypes: ', e);
               }

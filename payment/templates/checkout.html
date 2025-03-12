@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <form id="form-checkout" action="{{ url_for('card.payment') }}" method="post">
+    <form id="form-checkout" action="{{ url_for('pix.payment') }}" method="post">
         <h2>Payment Form</h2>
 
         <label for="amount">Amount:</label><br>
