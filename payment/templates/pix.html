@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <form id="form-checkout" action="/process_payment" method="post">
+    <form id="form-checkout" action="{{ url_for('pix.process_payment') }}" method="post">
         <div>
               <div>
                     <label for="payerFirstName">Nome</label>
@@ -34,6 +34,7 @@
               <div>
                     <input type="hidden" name="transactionAmount" id="transactionAmount" value="{{ amount }}">
                     <input type="hidden" name="description" id="description" value="{{ description }}">
+                    <input type="hidden" name="purchase_identification" id="purchase_identification" value="{{ purchase_identification }}">
                     <br>
                     <button type="submit">Pagar</button>
               </div>

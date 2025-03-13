@@ -27,8 +27,8 @@ def payment():
         return jsonify({'error': 'Encryption failed', 'details': str(e)}), 500
 
 
-@card_bp.route('/card/process_payment', methods=['POST'])
-def handle_payment():
+@card_bp.route('/card/process_payment/', methods=['POST'])
+def process_payment():
     try:
         if not request.is_json:
             print("Invalid request format. Expected JSON")
@@ -59,11 +59,11 @@ def handle_payment():
         return jsonify({"error": "Internal server error"}), 500
 
 
-@card_bp.route('/card/payment_response', methods=['GET', ])
+@card_bp.route('/card/payment_response/', methods=['GET', ])
 def payment_response():
     return render_template('successful.html')
 
 
-@card_bp.route('/card/payment_error', methods=['GET', ])
+@card_bp.route('/card/payment_error/', methods=['GET', ])
 def payment_error():
     return render_template('error.html')
