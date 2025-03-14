@@ -20,7 +20,7 @@ def payment():
         purchase_identification = CARD_PAYMENT.build_purchase_identification(form_data)
         cipher_purchase = CARD_PAYMENT.encrypt_data(purchase_identification)
 
-        return render_template('card.html', **form_data,
+        return render_template('card/card.html', **form_data,
                                payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY,
                                purchase_identification=cipher_purchase)
     except Exception as e:
@@ -39,7 +39,7 @@ def process_payment():
 
         if not CARD_PAYMENT.validate_purchase_data(purchase_identification, data):
             print("Invalid parameters")
-            return jsonify({'error': 'Invalid parameters'}), 400
+            return jsonify({'card/error': 'Invalid parameters'}), 400
 
         payment_response = CARD_PAYMENT.process_payment(data)
 
@@ -61,9 +61,9 @@ def process_payment():
 
 @card_bp.route('/card/payment_response/', methods=['GET', ])
 def payment_response():
-    return render_template('successful.html')
+    return render_template('card/successful.html')
 
 
 @card_bp.route('/card/payment_error/', methods=['GET', ])
 def payment_error():
-    return render_template('error.html')
+    return render_template('card/error.html')

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Approved</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="status-container success" id="payment-approved">
+        <div class="status-icon">✅</div>
+        <div class="status-message">Payment Approved! 🎉</div>
+        <div>
+            <img src="data:image/jpeg;base64,{{ qr_code_base64 }}" height="200px"/>
+        </div>
+        <div class="status-message">
+            <label for="copiar">Copiar Hash:</label>
+            <input type="text" id="copiar" value={{ qr_code }} readonly/>
+        </div>
+        <button class="btn-back" onclick="window.location.href='/'">Go Back Home</button>
+    </div>
+</body>
+</html>
