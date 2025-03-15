@@ -31,7 +31,6 @@ class Pix(Payment):
                 }
             }
         }
-        print(payment_data)
 
         payment_response = self.MP_SDK.payment().create(payment_data, request_options)
         payment = payment_response["response"]

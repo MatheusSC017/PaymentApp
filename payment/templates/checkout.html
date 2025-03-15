@@ -25,6 +25,8 @@
         <label for="identificationNumber">Identification Number:</label><br>
         <input type="text" id="identificationNumber" name="identificationNumber"/><br><br>
 
+        <input type="hidden" id="returnLink" name="returnLink" value="{{ url_for('checkout.checkout') }}"/>
+
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br><br>
 

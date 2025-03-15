@@ -9,7 +9,8 @@
     <div class="status-container error" id="payment-rejected">
         <div class="status-icon">❌</div>
         <div class="status-message">Payment Rejected. Please try again.</div>
-        <button class="btn-back" onclick="window.location.href='/'">Try Again</button>
+        <div class="status-message">{{ error }}</div>
+        <button class="btn-back" onclick="window.location.href='{{ return_link }}'">Try Again</button>
     </div>
 </body>
 </html>

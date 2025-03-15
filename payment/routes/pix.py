@@ -8,8 +8,9 @@ PIX_PAYMENT = Pix()
 
 @pix_bp.route('/pix/', methods=['POST', ])
 def payment():
+    print(request.form)
     form_data = {key: request.form.get(key, '').strip() for key in
-                 ['amount', 'description', 'identificationType', 'identificationNumber', 'email']}
+                 ['amount', 'description', 'identificationType', 'identificationNumber', 'email', 'returnLink']}
 
     if not PIX_PAYMENT.validate_form_data(form_data):
         return jsonify({'error': 'Invalid parameters'}), 400
@@ -27,27 +28,28 @@ def payment():
 
 @pix_bp.route('/pix/process_payment/', methods=['POST', ])
 def process_payment():
-    try:
-        if not request.form:
-            print("Invalid request format. Expected JSON")
-            return render_template('pix/error.html')
+    if not request.form:
+        print('Invalid request format. Expected JSON')
+        return render_template('pix/error.html', error='Invalid request format. Expected JSON')
 
-        data = request.form
+    data = request.form
+
+    try:
         purchase_identification = PIX_PAYMENT.decrypt_purchase_identification(data["purchase_identification"])
 
         if not PIX_PAYMENT.validate_purchase_data(purchase_identification, data):
-            print("Invalid parameters")
-            return render_template('pix/error.html')
+            print('Invalid parameters')
+            return render_template('pix/error.html', error='Invalid parameters', return_link=data['return_link'])
 
         payment_response = PIX_PAYMENT.process_payment(data)
 
         return render_template('pix/successful.html',
                                qr_code_base64=payment_response['point_of_interaction']['transaction_data']['qr_code_base64'],
-                               qr_code=payment_response['point_of_interaction']['transaction_data']['qr_code'])
+                               qr_code=payment_response['point_of_interaction']['transaction_data']['qr_code'], return_link=data['returnLink'])
     except ValueError as e:
         print(e)
-        return render_template('pix/error.html')
+        return render_template('pix/error.html', error=e, return_link=data['return_link'])
 
     except Exception as e:
         print(f"Error processing payment: {e}")
-        return render_template('pix/error.html')
+        return render_template('pix/error.html', error=e, return_link=data['return_link'])
