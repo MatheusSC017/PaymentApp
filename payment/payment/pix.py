@@ -22,12 +22,12 @@ class Pix(Payment):
                     "number": data["identificationNumber"],
                 },
                 "address": {
-                    "zip_code": "06233-200",
-                    "street_name": "Av. das Nações Unidas",
-                    "street_number": "3003",
-                    "neighborhood": "Bonfim",
-                    "city": "Osasco",
-                    "federal_unit": "SP"
+                    "zip_code": data["zipCode"],
+                    "street_name": data["streetName"],
+                    "street_number": data["streetNumber"],
+                    "neighborhood": data["neighborhood"],
+                    "city": data["city"],
+                    "federal_unit": data["federalUnit"],
                 }
             }
         }
