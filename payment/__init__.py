@@ -1,6 +1,7 @@
 from flask import Flask
 from .routes.pix import pix_bp
 from .routes.card import card_bp
+from .routes.bill import bill_bp
 from .routes.checkout import checkout_bp
 from dotenv import load_dotenv
 import os
@@ -34,4 +35,5 @@ def configure_app(app):
 def initialize_routes(app):
     app.register_blueprint(card_bp)
     app.register_blueprint(pix_bp)
+    app.register_blueprint(bill_bp)
     app.register_blueprint(checkout_bp)

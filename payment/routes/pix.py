@@ -8,7 +8,6 @@ PIX_PAYMENT = Pix()
 
 @pix_bp.route('/pix/', methods=['POST', ])
 def payment():
-    print(request.form)
     form_data = {key: request.form.get(key, '').strip() for key in
                  ['amount', 'description', 'identificationType', 'identificationNumber', 'email', 'returnLink']}
 
