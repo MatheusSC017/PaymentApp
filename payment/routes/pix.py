@@ -40,7 +40,10 @@ def process_payment():
             print('Invalid parameters')
             return render_template('pix/error.html', error='Invalid parameters', return_link=data['return_link'])
 
-        payment_response = PIX_PAYMENT.process_payment(data)
+        payment_status, payment_response = PIX_PAYMENT.process_payment(data)
+        if payment_status != 201:
+            print(payment_response)
+            return render_template('bill/error.html', error=payment_response['message'], return_link=data['return_link'])
 
         return render_template('pix/successful.html',
                                qr_code_base64=payment_response['point_of_interaction']['transaction_data']['qr_code_base64'],

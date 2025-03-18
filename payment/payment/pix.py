@@ -33,9 +33,7 @@ class Pix(Payment):
         }
 
         payment_response = self.MP_SDK.payment().create(payment_data, request_options)
-        payment = payment_response["response"]
-
-        return payment
+        return payment_response["status"], payment_response["response"]
 
     def get_payment(self):
         pass

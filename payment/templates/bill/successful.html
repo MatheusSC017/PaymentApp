@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Approved</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="status-container success" id="payment-approved">
+        <div class="status-icon">✅</div>
+        <div class="status-message">Payment Approved! 🎉</div>
+        <button class="btn-back" onclick="window.location.href='{{ return_link }}'">Go Back Home</button>
+    </div>
+</body>
+</html>

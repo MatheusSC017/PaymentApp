@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <form id="form-checkout" action="/process_payment" method="post">
+    <form id="form-checkout" action="{{ url_for('bill.process_payment') }}" method="post">
         <div>
             <h1>Payer Request</h1>
             <div>
@@ -32,15 +32,15 @@
              </div>
              <div>
                 <label for="zip_code"> CEP: </label>
-                <input id="form-checkout__zip_code" name="zip_code" type="text">
+                <input id="form-checkout__zip_code" name="zipCode" type="text">
              </div>
              <div>
                 <label for="street_name"> Rua: </label>
-                <input id="form-checkout__street_name" name="street_name" type="text">
+                <input id="form-checkout__street_name" name="streetName" type="text">
              </div>
              <div>
                 <label for="street_number"> Número: </label>
-                <input id="form-checkout__street_number" name="street_number" type="text">
+                <input id="form-checkout__street_number" name="streetNumber" type="text">
              </div>
              <div>
                 <label for="neighborhood"> Bairro: </label>
@@ -52,13 +52,15 @@
              </div>
              <div>
                 <label for="federal_unit"> Estado: </label>
-                <input id="form-checkout__federal_unit" name="federal_unit" type="text">
+                <input id="form-checkout__federal_unit" name="federalUnit" type="text">
              </div>
         </div>
         <div>
             <div>
                 <input type="hidden" name="transactionAmount" id="transactionAmount" value="{{ amount }}">
                 <input type="hidden" name="description" id="description" value="{{ description }}">
+                <input type="hidden" name="purchase_identification" id="purchase_identification" value="{{ purchase_identification }}">
+                <input type="hidden" name="returnLink" value="{{ returnLink }}"/>
                 <br>
                 <button type="submit">Pagar</button>
             </div>
