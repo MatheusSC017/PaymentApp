@@ -4,13 +4,27 @@
     <meta charset="UTF-8">
     <title>Approved</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
 </head>
 <body>
 
     <div class="status-container success" id="payment-approved">
         <div class="status-icon">✅</div>
         <div class="status-message">Payment Approved! 🎉</div>
+        <div class="status-message">
+            <svg id="barcode"></svg>
+        </div>
         <button class="btn-back" onclick="window.location.href='{{ return_link }}'">Go Back Home</button>
     </div>
+
+    <script>
+        JsBarcode("#barcode", "{{ digitable_line }}", {
+            format: "CODE128",
+            lineColor: "#000",
+            width: 2,
+            height: 60,
+            displayValue: true
+        });
+    </script>
 </body>
 </html>
