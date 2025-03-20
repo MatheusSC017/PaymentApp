@@ -59,8 +59,8 @@ def process_payment():
         return jsonify({"error": "Internal server error"}), 500
 
 
-@card_bp.route('/card/payment_response/', methods=['GET', ])
-def payment_response():
+@card_bp.route('/card/payment_successful/', methods=['GET', ])
+def payment_successful():
     return render_template('card/successful.html')
 
 

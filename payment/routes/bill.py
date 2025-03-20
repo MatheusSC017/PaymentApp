@@ -54,10 +54,3 @@ def process_payment():
     except Exception as e:
         print(f"Error processing payment: {e}")
         return render_template('bill/error.html', error=e, return_link=data['return_link'])
-
-
-@bill_bp.route('/bill/test/', methods=['GET', ])
-def test():
-    return render_template('bill/successful.html',
-                           digitable_line='23793380296060062430246006333309610270000002400')
-

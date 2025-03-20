@@ -127,7 +127,7 @@
                     const paymentResult = await response.json();
 
                     if (paymentResult.status === "approved") {
-                        window.location.href = "/card/payment_response";
+                        window.location.href = "/card/payment_successful";
                     } else {
                         window.location.href = "/card/payment_error";
                     }
