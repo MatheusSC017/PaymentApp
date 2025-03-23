@@ -1,6 +1,6 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
-from payment.payment.card import Card
+from payment.payment.card import Card, PaymentData
 from time import sleep
 
 
@@ -41,7 +41,12 @@ def process_payment():
             print("Invalid parameters")
             return jsonify({'card/error': 'Invalid parameters'}), 400
 
-        payment_response = CARD_PAYMENT.process_payment(data)
+        payment_data = PaymentData(
+            float(data["transaction_amount"]), data["token"], data["description"], int(data["installments"]),
+            data["payment_method_id"], data["payer"]["email"], data["payer"]["identification"]["type"],
+            data["payer"]["identification"]["number"],
+        )
+        payment_response = CARD_PAYMENT.process_payment(payment_data, data["purchase_identification"])
 
         i = 0
         while payment_response.get('status') == "in_process" or i == 5:
