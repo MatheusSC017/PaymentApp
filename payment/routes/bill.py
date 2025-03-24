@@ -1,6 +1,7 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
 from payment.payment.bill import Bill
+from payment.payment.base import PaymentData
 
 bill_bp = Blueprint('bill', __name__, template_folder='templates')
 BILL_PAYMENT = Bill()
@@ -40,7 +41,12 @@ def process_payment():
             print('Invalid parameters')
             return render_template('bill/error.html', error='Invalid parameters', return_link=data['return_link'])
 
-        payment_status, payment_response = BILL_PAYMENT.process_payment(data)
+        payment_data = PaymentData(
+            float(data["transactionAmount"]), data["description"], "bolbradesco", data["email"],
+            data["payerFirstName"], data["payerLastName"], data["identificationType"], data["identificationNumber"],
+            data["zipCode"], data["streetName"], data["streetNumber"], data["neighborhood"], data["city"], data["federalUnit"]
+        )
+        payment_status, payment_response = BILL_PAYMENT.process_payment(payment_data, data["purchase_identification"])
 
         if payment_status != 201:
             print(payment_response)

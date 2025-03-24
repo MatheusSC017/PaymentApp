@@ -3,36 +3,13 @@ import mercadopago
 
 
 class Pix(Payment):
-    def process_payment(self, data):
+    def process_payment(self, payment_data, purchase_identification):
         request_options = mercadopago.config.RequestOptions()
         request_options.custom_headers = {
-            'x-idempotency-key': data["purchase_identification"]
+            'x-idempotency-key': purchase_identification
         }
 
-        payment_data = {
-            "transaction_amount": float(data["transactionAmount"]),
-            "description": data["description"],
-            "payment_method_id": "pix",
-            "payer": {
-                "email": data["email"],
-                "first_name": data["payerFirstName"],
-                "last_name": data["payerLastName"],
-                "identification": {
-                    "type": data["identificationType"],
-                    "number": data["identificationNumber"],
-                },
-                "address": {
-                    "zip_code": data["zipCode"],
-                    "street_name": data["streetName"],
-                    "street_number": data["streetNumber"],
-                    "neighborhood": data["neighborhood"],
-                    "city": data["city"],
-                    "federal_unit": data["federalUnit"],
-                }
-            }
-        }
-
-        payment_response = self.MP_SDK.payment().create(payment_data, request_options)
+        payment_response = self.MP_SDK.payment().create(payment_data.get_formatted_data(), request_options)
         return payment_response["status"], payment_response["response"]
 
     def get_payment(self):
