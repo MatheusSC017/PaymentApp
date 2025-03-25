@@ -31,8 +31,48 @@ class SignaturePlan:
 
         return {}
 
+    def update_signature(self, id, reason, auto_recurring, back_url):
+        url = self.SIGNATURE_URL + "preapproval_plan/" + id
+
+        headers = {
+            "Authorization": self.ACCESS_TOKEN,
+            "Content-Type": "application/json"
+        }
+
+        data = {
+            "reason": reason,
+            "auto_recurring": auto_recurring.get_auto_recurring_form(),
+            "payment_methods_allowed": {
+                "payment_types": [{}],
+                "payment_methods": [{}]
+            },
+            "back_url": back_url
+        }
+
+        response = requests.put(url, json=data, headers=headers)
+        if response.status_code == 200:
+            return response.json()
+
+        print(response.content)
+        return {}
+
     def get_signatures(self):
         url = self.SIGNATURE_URL + "preapproval_plan/search"
+
+        headers = {
+            "Authorization": self.ACCESS_TOKEN,
+            "Content-Type": "application/json"
+        }
+
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            return response.json()
+
+        print(response.content)
+        return {}
+
+    def get_signature(self, id):
+        url = self.SIGNATURE_URL + "preapproval_plan/" + id
 
         headers = {
             "Authorization": self.ACCESS_TOKEN,
@@ -89,6 +129,14 @@ if __name__ == "__main__":
                                     1, 10, "BRL")
     signature_plan = SignaturePlan()
 
-    # response = signature_plan.add_signature("Yoga Class", auto_reccurring, "https://github.com/MatheusSC017")
-    # print(response)
-    signature_plan.get_signatures()
+    response = signature_plan.add_signature("Yoga Class", auto_reccurring, "https://github.com/MatheusSC017")
+    print(response)
+
+    response = signature_plan.get_signatures()
+    print(response)
+
+    response = signature_plan.update_signature("2c93808495b8594f0195ca2b158e0940", "Box Class", auto_reccurring, "https://github.com/MatheusSC017")
+    print(response)
+
+    response = signature_plan.get_signature("2c93808495b8594f0195ca2b158e0940")
+    print(response)
