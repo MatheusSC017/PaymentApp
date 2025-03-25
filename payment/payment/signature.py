@@ -1,65 +1,71 @@
 import requests
+import os
 
 
-class Signature:
-    SIGNATURE_URL = "https://api.mercadopago.com/preapproval_plan"
-    ACCESS_TOKEN = "Bearer YOUR_ACCESS_TOKEN"
+class SignaturePlan:
+    SIGNATURE_URL = "https://api.mercadopago.com/preapproval"
+    ACCESS_TOKEN = f"Bearer {os.environ.get('PAYMENT_MP_ACCESS_KEY')}"
 
-    def add_signature(self, reason, auto_recurring, back_url):
+    def add_signature(self, signature_data):
         headers = {
             "Authorization": self.ACCESS_TOKEN,
             "Content-Type": "application/json"
         }
-        data = {
-            "reason": reason,
-            "auto_recurring": auto_recurring.get_auto_recurring_form(),
-            "payment_methods_allowed": {
-                "payment_types": [{}],
-                "payment_methods": [{}]
-            },
-            "back_url": back_url
-        }
 
-        response = requests.post(self.SIGNATURE_URL, json=data, headers=headers)
+        response = requests.post(self.SIGNATURE_URL, json=signature_data.get_signature_form(), headers=headers)
 
-        if response.status_code == 200:
+        if response.status_code == 201:
             return response.json()
 
         return {}
 
 
-class AutoRecurring:
+class SignatureData:
+    plan_id = None
+    reason = None
+    external_reference = None
+    payer_email = None
+    card_token_id = None
     frequency = None
     frequency_type = None
-    repetitions = None
-    billing_day = None
-    billing_day_proportional = None
-    free_trial_frequency  = None
+    start_date = None
+    end_date = None
     transaction_amount = None
     currency_id = None
+    back_url = None
+    status = None
 
-    def __init__(self, frequency, frequency_type, repetitions, billing_day, billing_day_proportional,
-                 free_trial_frequency, transaction_amount, currency_id):
+    def __init__(self, plan_id, reason, external_reference, payer_email, card_token_id,
+                 frequency, frequency_type, start_date, end_date, transaction_amount, currency_id, back_url, status):
+        self.plan_id = plan_id
+        self.reason = reason
+        self.external_reference = external_reference
+        self.payer_email = payer_email
+        self.card_token_id = card_token_id
         self.frequency = frequency
         self.frequency_type = frequency_type
-        self.repetitions = repetitions
-        self.billing_day = billing_day
-        self.billing_day_proportional = billing_day_proportional
-        self.free_trial_frequency = free_trial_frequency
+        self.start_date = start_date
+        self.end_date = end_date
         self.transaction_amount = transaction_amount
         self.currency_id = currency_id
+        self.back_url = back_url
+        self.status = status
 
-    def get_auto_recurring_form(self):
+    def get_signature_form(self):
         return {
+            "preapproval_plan_id": self.plan_id,
+            "reason": self.reason,
+            "external_reference": self.external_reference,
+            "payer_email": self.payer_email,
+            "card_token_id": self.card_token_id,
+            "auto_recurring": {
                 "frequency": self.frequency,
                 "frequency_type": self.frequency_type,
-                "repetitions": self.repetitions,
-                "billing_day": self.billing_day,
-                "billing_day_proportional": self.billing_day_proportional,
-                "free_trial": {
-                    "frequency": self.free_trial_frequency,
-                    "frequency_type": self.frequency_type,
-                },
+                "start_date": self.start_date,
+                "end_date": self.end_date,
                 "transaction_amount": self.transaction_amount,
                 "currency_id": self.currency_id
+            },
+            "back_url": self.back_url,
+            "status": self.status
         }
