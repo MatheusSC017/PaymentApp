@@ -2,7 +2,7 @@ import requests
 import os
 
 
-class SignaturePlan:
+class Signature:
     SIGNATURE_URL = "https://api.mercadopago.com/preapproval"
     ACCESS_TOKEN = f"Bearer {os.environ.get('PAYMENT_MP_ACCESS_KEY')}"
 
@@ -17,6 +17,8 @@ class SignaturePlan:
         if response.status_code == 201:
             return response.json()
 
+        print(response.status_code)
+        print(response.content)
         return {}
 
 
@@ -69,3 +71,16 @@ class SignatureData:
             "back_url": self.back_url,
             "status": self.status
         }
+
+
+if __name__ == "__main__":
+    signature_data = SignatureData(
+        "2c93808495b8594f0195ca2b158e0940", "Box Classes", "YG-12345", "test_user@test_user.com",
+        "e3ed6f098462036dd2cbabe314b9de2a", 1, "months", "2020-06-02T13:07:14.260Z", "2022-07-20T15:59:52.581Z",
+        10, "BRL", "https://github.com/MatheusSC017", "authorized"
+    )
+
+    signature = Signature()
+
+    response = signature.add_signature(signature_data)
+    print(response)

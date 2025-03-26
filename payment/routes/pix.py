@@ -1,7 +1,7 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
-from payment.payment.pix import Pix
-from payment.payment.base import PaymentData
+from payment.payments.pix import Pix
+from payment.payments.base import PaymentData
 
 pix_bp = Blueprint('pix', __name__, template_folder='templates')
 PIX_PAYMENT = Pix()

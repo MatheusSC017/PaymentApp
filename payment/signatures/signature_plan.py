@@ -6,7 +6,7 @@ class SignaturePlan:
     SIGNATURE_URL = "https://api.mercadopago.com/"
     ACCESS_TOKEN = f"Bearer {os.environ.get('PAYMENT_MP_ACCESS_KEY')}"
 
-    def add_signature(self, reason, auto_recurring, back_url):
+    def add_signature_plan(self, reason, auto_recurring, back_url):
         url = self.SIGNATURE_URL + "preapproval_plan"
 
         headers = {
@@ -31,7 +31,7 @@ class SignaturePlan:
 
         return {}
 
-    def update_signature(self, id, reason, auto_recurring, back_url):
+    def update_signature_plan(self, id, reason, auto_recurring, back_url):
         url = self.SIGNATURE_URL + "preapproval_plan/" + id
 
         headers = {
@@ -56,7 +56,7 @@ class SignaturePlan:
         print(response.content)
         return {}
 
-    def get_signatures(self):
+    def get_signature_plans(self):
         url = self.SIGNATURE_URL + "preapproval_plan/search"
 
         headers = {
@@ -71,7 +71,7 @@ class SignaturePlan:
         print(response.content)
         return {}
 
-    def get_signature(self, id):
+    def get_signature_plan(self, id):
         url = self.SIGNATURE_URL + "preapproval_plan/" + id
 
         headers = {
@@ -129,14 +129,14 @@ if __name__ == "__main__":
                                     1, 10, "BRL")
     signature_plan = SignaturePlan()
 
-    response = signature_plan.add_signature("Yoga Class", auto_reccurring, "https://github.com/MatheusSC017")
+    response = signature_plan.add_signature_plan("Yoga Class", auto_reccurring, "https://github.com/MatheusSC017")
     print(response)
 
-    response = signature_plan.get_signatures()
+    response = signature_plan.get_signature_plans()
     print(response)
 
-    response = signature_plan.update_signature("2c93808495b8594f0195ca2b158e0940", "Box Class", auto_reccurring, "https://github.com/MatheusSC017")
+    response = signature_plan.update_signature_plan("2c93808495b8594f0195ca2b158e0940", "Box Class", auto_reccurring, "https://github.com/MatheusSC017")
     print(response)
 
-    response = signature_plan.get_signature("2c93808495b8594f0195ca2b158e0940")
+    response = signature_plan.get_signature_plan("2c93808495b8594f0195ca2b158e0940")
     print(response)

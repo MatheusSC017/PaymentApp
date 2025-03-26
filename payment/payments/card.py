@@ -1,4 +1,4 @@
-from payment.payment.base import Payment
+from payment.payments.base import Payment
 import mercadopago
 
 

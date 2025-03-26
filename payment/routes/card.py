@@ -1,6 +1,6 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
-from payment.payment.card import Card, PaymentData
+from payment.payments.card import Card, PaymentData
 from time import sleep
 
 

@@ -1,7 +1,7 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
-from payment.payment.bill import Bill
-from payment.payment.base import PaymentData
+from payment.payments.bill import Bill
+from payment.payments.base import PaymentData
 
 bill_bp = Blueprint('bill', __name__, template_folder='templates')
 BILL_PAYMENT = Bill()
