@@ -3,12 +3,10 @@ import os
 
 
 class SignaturePlan:
-    SIGNATURE_URL = "https://api.mercadopago.com/"
+    BASE_URL = "https://api.mercadopago.com/preapproval_plan/"
     ACCESS_TOKEN = f"Bearer {os.environ.get('PAYMENT_MP_ACCESS_KEY')}"
 
     def add_signature_plan(self, reason, auto_recurring, back_url):
-        url = self.SIGNATURE_URL + "preapproval_plan"
-
         headers = {
             "Authorization": self.ACCESS_TOKEN,
             "Content-Type": "application/json"
@@ -24,7 +22,7 @@ class SignaturePlan:
             "back_url": back_url
         }
 
-        response = requests.post(url, json=data, headers=headers)
+        response = requests.post(self.BASE_URL, json=data, headers=headers)
 
         if response.status_code == 201:
             return response.json()
@@ -32,7 +30,7 @@ class SignaturePlan:
         return {}
 
     def update_signature_plan(self, id, reason, auto_recurring, back_url):
-        url = self.SIGNATURE_URL + "preapproval_plan/" + id
+        url = self.BASE_URL + id
 
         headers = {
             "Authorization": self.ACCESS_TOKEN,
@@ -57,7 +55,7 @@ class SignaturePlan:
         return {}
 
     def get_signature_plans(self):
-        url = self.SIGNATURE_URL + "preapproval_plan/search"
+        url = self.BASE_URL + "search"
 
         headers = {
             "Authorization": self.ACCESS_TOKEN,
@@ -72,7 +70,7 @@ class SignaturePlan:
         return {}
 
     def get_signature_plan(self, id):
-        url = self.SIGNATURE_URL + "preapproval_plan/" + id
+        url = self.BASE_URL + id
 
         headers = {
             "Authorization": self.ACCESS_TOKEN,

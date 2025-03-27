@@ -3,7 +3,7 @@ import os
 
 
 class Signature:
-    SIGNATURE_URL = "https://api.mercadopago.com/preapproval"
+    BASE_URL = "https://api.mercadopago.com/preapproval"
     ACCESS_TOKEN = f"Bearer {os.environ.get('PAYMENT_MP_ACCESS_KEY')}"
 
     def add_signature(self, signature_data):
@@ -12,7 +12,7 @@ class Signature:
             "Content-Type": "application/json"
         }
 
-        response = requests.post(self.SIGNATURE_URL, json=signature_data.get_signature_form(), headers=headers)
+        response = requests.post(self.BASE_URL, json=signature_data.get_signature_form(), headers=headers)
 
         if response.status_code == 201:
             return response.json()

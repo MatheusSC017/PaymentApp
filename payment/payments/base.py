@@ -15,7 +15,6 @@ class Payment:
     MP_SDK = mercadopago.SDK(os.environ.get("PAYMENT_MP_PRIVATE_KEY"))
     MP_PUBLIC_KEY = os.environ.get("PAYMENT_MP_PUBLIC_KEY")
 
-
     def process_payment(self):
         pass
 
