@@ -72,3 +72,14 @@ def payment_successful():
 @card_bp.route('/card/payment_error/', methods=['GET', ])
 def payment_error():
     return render_template('card/error.html')
+
+
+@card_bp.route('/card/register/', methods=['GET', 'POST'])
+def register_card():
+    """
+    Example of input
+
+    {'token': 'c25fa5331273a17e4a31faa5029969e9', 'issuer_id': '24', 'payment_method_id': 'master', 'transaction_amount': 120,
+    'installments': 4, 'description': 'teste', 'payer': {'email': 'teste@gmail.com', 'identification': {'type': 'CPF', 'number': '12345678909'}},
+    'purchase_identification': '08xvasn2OMcCyxhhirBVXtWH6b8iJJpg+fRSBPA0kpV2NPndTuH7ZzwCOK9qTQkRiKE1TGkLfZ7r0NnkFYipnNzgEJYQ1eJInLUw5fIYrJaWs7OsvJgR9Hmsvy2DjCJhAxRZSJoOEy2SWa3Q7/RlW0V1CeKdZau1ubEdL2+chCI='}
+    """

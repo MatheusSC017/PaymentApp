@@ -1,4 +1,5 @@
 import requests
+import mercadopago
 import os
 
 
@@ -138,7 +139,7 @@ if __name__ == "__main__":
     client = Client(
         "test@test.com", "Jhon", "Doe", "55", "991234567", "CPF", "12345678900",
         "Home", "01234567", "01001000", "Rua Exemplo", 123, {},
-        "2021-10-20T11:37:30.000-04:00", "Description del user",  "None"
+        "2021-10-20T11:37:30.000-04:00", "Description del user",  None
     )
 
     client_proxy = ClientProxy()
