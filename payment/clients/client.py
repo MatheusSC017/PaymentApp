@@ -1,70 +1,48 @@
-import requests
 import mercadopago
 import os
 
 
 class ClientProxy:
-    BASE_URL = "https://api.mercadopago.com/v1/customers/"
-    ACCESS_TOKEN = f"Bearer {os.environ.get('PAYMENT_MP_ACCESS_KEY')}"
+    MP_SDK = mercadopago.SDK(os.environ.get("PAYMENT_MP_PRIVATE_KEY"))
 
     def add_client(self, client):
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
+        response = self.MP_SDK.customer().create(client.get_formatted_data())
 
-        response = requests.post(self.BASE_URL, json=client.get_formatted_data(), headers=headers)
+        if response["status"] == 201:
+            return response["response"]
 
-        if response.status_code == 201:
-            return response.json()
-
-        print(response.status_code)
-        print(response.content)
+        print(response["status"])
+        print(response["response"])
         return {}
 
     def update_client(self, id, client):
-        url = self.BASE_URL + id
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
+        response = self.MP_SDK.customer().update(id, client.get_formatted_data(include_email=False))
 
-        response = requests.put(url, json=client.get_formatted_data(include_email=False), headers=headers)
-        if response.status_code == 200:
-            return response.json()
+        if response["status"] == 200:
+            return response["response"]
 
-        print(response.status_code)
-        print(response.content)
+        print(response["status"])
+        print(response["response"])
         return {}
 
     def get_clients(self, email):
-        url = self.BASE_URL + "search"
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
+        response = self.MP_SDK.customer().search({"email": email})
 
-        response = requests.get(url, params={"email": email}, headers=headers)
-        if response.status_code == 200:
-            return response.json()
+        if response["status"] == 200:
+            return response["response"]
 
-        print(response.status_code)
-        print(response.content)
+        print(response["status"])
+        print(response["response"])
         return {}
 
     def get_client(self, id):
-        url = self.BASE_URL + id
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
+        response = self.MP_SDK.customer().get(id)
 
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            return response.json()
+        if response["status"] == 200:
+            return response["response"]
 
-        print(response.status_code)
-        print(response.content)
+        print(response["status"])
+        print(response["response"])
         return {}
 
 
@@ -150,9 +128,9 @@ if __name__ == "__main__":
     # response = client_proxy.get_clients("test@test.com")
     # print(response)
 
-    response = client_proxy.get_client("2356245804-DEYZ4CxwkJKxXv")
-    print(response)
+    # response = client_proxy.get_client("2356245804-D6qA5TtnMTdG3O")
+    # print(response)
 
     client.last_name = "Smith"
-    response = client_proxy.update_client("2356245804-DEYZ4CxwkJKxXv", client)
+    response = client_proxy.update_client("2356245804-D6qA5TtnMTdG3O", client)
     print(response)
