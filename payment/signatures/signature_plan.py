@@ -1,17 +1,11 @@
-import requests
+import mercadopago
 import os
 
 
 class SignaturePlan:
-    BASE_URL = "https://api.mercadopago.com/preapproval_plan/"
-    ACCESS_TOKEN = f"Bearer {os.environ.get('PAYMENT_MP_ACCESS_KEY')}"
+    MP_SDK = mercadopago.SDK(os.environ.get("PAYMENT_MP_PRIVATE_KEY"))
 
     def add_signature_plan(self, reason, auto_recurring, back_url):
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
-
         data = {
             "reason": reason,
             "auto_recurring": auto_recurring.get_auto_recurring_form(),
@@ -22,21 +16,16 @@ class SignaturePlan:
             "back_url": back_url
         }
 
-        response = requests.post(self.BASE_URL, json=data, headers=headers)
+        response = self.MP_SDK.plan().create(data)
 
-        if response.status_code == 201:
-            return response.json()
+        if response["status"] == 201:
+            return response["response"]
 
+        print(response["status"])
+        print(response["response"])
         return {}
 
     def update_signature_plan(self, id, reason, auto_recurring, back_url):
-        url = self.BASE_URL + id
-
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
-
         data = {
             "reason": reason,
             "auto_recurring": auto_recurring.get_auto_recurring_form(),
@@ -47,41 +36,33 @@ class SignaturePlan:
             "back_url": back_url
         }
 
-        response = requests.put(url, json=data, headers=headers)
-        if response.status_code == 200:
-            return response.json()
+        response = self.MP_SDK.plan().update(id, data)
 
-        print(response.content)
+        if response["status"] == 200:
+            return response["response"]
+
+        print(response["status"])
+        print(response["response"])
         return {}
 
     def get_signature_plans(self):
-        url = self.BASE_URL + "search"
+        response = self.MP_SDK.plan().search()
 
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
+        if response["status"] == 200:
+            return response["response"]
 
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            return response.json()
-
-        print(response.content)
+        print(response["status"])
+        print(response["response"])
         return {}
 
     def get_signature_plan(self, id):
-        url = self.BASE_URL + id
+        response = self.MP_SDK.plan().get(id)
 
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
+        if response["status"] == 200:
+            return response["response"]
 
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            return response.json()
-
-        print(response.content)
+        print(response["status"])
+        print(response["response"])
         return {}
 
 
