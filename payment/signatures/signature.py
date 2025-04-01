@@ -4,22 +4,46 @@ import os
 
 
 class Signature:
-    BASE_URL = "https://api.mercadopago.com/preapproval"
-    ACCESS_TOKEN = f"Bearer {os.environ.get('PAYMENT_MP_ACCESS_KEY')}"
+    MP_SDK = mercadopago.SDK(os.environ.get("PAYMENT_MP_PRIVATE_KEY"))
 
     def add_signature(self, signature_data):
-        headers = {
-            "Authorization": self.ACCESS_TOKEN,
-            "Content-Type": "application/json"
-        }
+        response = self.MP_SDK.subscription().create(signature_data.get_signature_form())
 
-        response = requests.post(self.BASE_URL, json=signature_data.get_signature_form(), headers=headers)
+        if response["status"] == 201:
+            return response["response"]
 
-        if response.status_code == 201:
-            return response.json()
+        print(response["status"])
+        print(response["response"])
+        return {}
 
-        print(response.status_code)
-        print(response.content)
+    def update_signature(self, signature_id, signature_data):
+        response = self.MP_SDK.subscription().update(signature_id, signature_data.get_signature_form())
+
+        if response["status"] == 200:
+            return response["response"]
+
+        print(response["status"])
+        print(response["response"])
+        return {}
+
+    def get_signatures(self, payer_email):
+        response = self.MP_SDK.subscription().search({"payer_email": payer_email})
+
+        if response["status"] == 200:
+            return response["response"]
+
+        print(response["status"])
+        print(response["response"])
+        return {}
+
+    def get_signature(self, signature_id):
+        response = self.MP_SDK.subscription().get(signature_id)
+
+        if response["status"] == 200:
+            return response["response"]
+
+        print(response["status"])
+        print(response["response"])
         return {}
 
 
