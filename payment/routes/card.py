@@ -84,14 +84,34 @@ def payment_error():
 @card_bp.route('/card/register/', methods=['GET', 'POST'])
 def register_card():
     if request.method == "POST":
+        data = request.get_json()
+
+        response = CLIENT_PROXY.get_clients(data["email"])
+        client = response["results"]
+
+        if len(client) == 0:
+            return jsonify({"Error": f"Client with e-mail {request.form.get('cardHolderEmail')} not found"}), 404
+
+        card_data = {
+            "token": data["token"]
+        }
+        card = CARD_PROXY.add_card(client[0]["id"], card_data)
+
+        return jsonify(card), 200
+    else:
+        return render_template('card/card_register.html', payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY)
+
+
+@card_bp.route('/card/search/', methods=['GET', 'POST'])
+def get_cards():
+    if request.method == "POST":
         response = CLIENT_PROXY.get_clients(request.form.get("cardHolderEmail"))
         client = response["results"]
 
         if len(client) == 0:
             return jsonify({"Error": f"Client with e-mail {request.form.get('cardHolderEmail')} not found"}), 404
 
-        card = CARD_PROXY.add_card(client[0]["id"], request.get_json())
-
-        return jsonify(card), 200
+        cards = CARD_PROXY.get_cards(client[0]["id"])
+        return render_template('card/cards.html', cards=cards)
     else:
-        return render_template('card/card.html', payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY)
+        return render_template('card/card_search.html')

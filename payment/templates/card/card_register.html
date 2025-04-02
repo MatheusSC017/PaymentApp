@@ -12,7 +12,7 @@
         <div id="form-checkout__securityCode" class="container"></div>
         <input type="text" id="form-checkout__cardholderName" />
         <select id="form-checkout__issuer"></select>
-        <select id="form-checkout__installments"></select>
+        <select id="form-checkout__installments" hidden="hidden"></select>
         <select id="form-checkout__identificationType"></select>
         <input type="text" id="form-checkout__identificationNumber"/>
         <input type="email" id="form-checkout__cardholderEmail"/>
@@ -24,7 +24,7 @@
     <script>
         const mp = new MercadoPago("{{ payment_mp_public_key }}");
         const cardForm = mp.cardForm({
-            amount: "100.5",
+            amount: "0",
             iframe: true,
             form: {
                 id: "form-checkout",
@@ -89,7 +89,7 @@
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({ token: token })
+                        body: JSON.stringify({ token: token, email: email})
                     }).then(response => {
                         if (response.redirected) {
                             window.location.href = response.url; // Redirect if necessary
