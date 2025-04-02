@@ -1,11 +1,18 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
 from payment.payments.card import Card, PaymentData
+from payment.clients.client import ClientProxy
+from payment.clients.card import CardProxy
 from time import sleep
+import mercadopago
+import os
 
 
 card_bp = Blueprint('card', __name__, template_folder='templates')
+MP_SDK = mercadopago.SDK(os.environ.get("PAYMENT_MP_PRIVATE_KEY"))
 CARD_PAYMENT = Card()
+CARD_PROXY = CardProxy()
+CLIENT_PROXY = ClientProxy()
 
 
 @card_bp.route('/card/', methods=['POST', ])
@@ -20,7 +27,7 @@ def payment():
         purchase_identification = CARD_PAYMENT.build_purchase_identification(form_data)
         cipher_purchase = CARD_PAYMENT.encrypt_data(purchase_identification)
 
-        return render_template('card/card.html', **form_data,
+        return render_template('card/payment_card.html', **form_data,
                                payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY,
                                purchase_identification=cipher_purchase)
     except Exception as e:
@@ -76,10 +83,15 @@ def payment_error():
 
 @card_bp.route('/card/register/', methods=['GET', 'POST'])
 def register_card():
-    """
-    Example of input
+    if request.method == "POST":
+        response = CLIENT_PROXY.get_clients(request.form.get("cardHolderEmail"))
+        client = response["results"]
 
-    {'token': 'c25fa5331273a17e4a31faa5029969e9', 'issuer_id': '24', 'payment_method_id': 'master', 'transaction_amount': 120,
-    'installments': 4, 'description': 'teste', 'payer': {'email': 'teste@gmail.com', 'identification': {'type': 'CPF', 'number': '12345678909'}},
-    'purchase_identification': '08xvasn2OMcCyxhhirBVXtWH6b8iJJpg+fRSBPA0kpV2NPndTuH7ZzwCOK9qTQkRiKE1TGkLfZ7r0NnkFYipnNzgEJYQ1eJInLUw5fIYrJaWs7OsvJgR9Hmsvy2DjCJhAxRZSJoOEy2SWa3Q7/RlW0V1CeKdZau1ubEdL2+chCI='}
-    """
+        if len(client) == 0:
+            return jsonify({"Error": f"Client with e-mail {request.form.get('cardHolderEmail')} not found"}), 404
+
+        card = CARD_PROXY.add_card(client[0]["id"], request.get_json())
+
+        return jsonify(card), 200
+    else:
+        return render_template('card/card.html', payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY)

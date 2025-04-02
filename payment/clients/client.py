@@ -115,15 +115,15 @@ class Client:
 
 if __name__ == "__main__":
     client = Client(
-        "test@test.com", "Jhon", "Doe", "55", "991234567", "CPF", "12345678900",
+        "test@gmail.com", "Jhon", "Doe", "55", "991234567", "CPF", "12345678900",
         "Home", "01234567", "01001000", "Rua Exemplo", 123, {},
         "2021-10-20T11:37:30.000-04:00", "Description del user",  None
     )
 
     client_proxy = ClientProxy()
 
-    # response = client_proxy.add_client(client)
-    # print(response)
+    response = client_proxy.add_client(client)
+    print(response)
 
     # response = client_proxy.get_clients("test@test.com")
     # print(response)
@@ -131,6 +131,6 @@ if __name__ == "__main__":
     # response = client_proxy.get_client("2356245804-D6qA5TtnMTdG3O")
     # print(response)
 
-    client.last_name = "Smith"
-    response = client_proxy.update_client("2356245804-D6qA5TtnMTdG3O", client)
-    print(response)
+    # client.last_name = "Smith"
+    # response = client_proxy.update_client("2356245804-D6qA5TtnMTdG3O", client)
+    # print(response)
