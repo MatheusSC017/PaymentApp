@@ -102,6 +102,13 @@ def register_card():
         return render_template('card/card_register.html', payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY)
 
 
+@card_bp.route('/card/<customer_id>/<card_id>/delete/', methods=['GET', ])
+def delete_card(customer_id, card_id):
+    response = CARD_PROXY.delete_card(customer_id, card_id)
+    print(response)
+    return jsonify({}), 200
+
+
 @card_bp.route('/card/search/', methods=['GET', 'POST'])
 def get_cards():
     if request.method == "POST":

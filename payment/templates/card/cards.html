@@ -49,6 +49,7 @@
             <p><strong>Issuer:</strong> {{ card.issuer.name }}</p>
             <p><strong>Expires:</strong> {{ card.expiration_month }}/{{ card.expiration_year }}</p>
         </div>
+        <a href="{{ url_for('card.delete_card', customer_id=card.customer_id, card_id=card.id) }}">Delete Card</a>
     </div>
     {% endfor %}
 </body>
