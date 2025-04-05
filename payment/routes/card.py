@@ -73,12 +73,12 @@ def process_payment():
 
 @card_bp.route('/card/payment_successful/', methods=['GET', ])
 def payment_successful():
-    return render_template('card/successful.html')
+    return render_template('card/response.html', response="successful", message="Pagamento aprovado!")
 
 
 @card_bp.route('/card/payment_error/', methods=['GET', ])
 def payment_error():
-    return render_template('card/error.html')
+    return render_template('card/response.html', response="error", message="Pagamento rejeitado! Por favor tente novamente.")
 
 
 @card_bp.route('/card/register/', methods=['GET', 'POST'])
@@ -90,14 +90,15 @@ def register_card():
         client = response["results"]
 
         if len(client) == 0:
-            return jsonify({"Error": f"Client with e-mail {request.form.get('cardHolderEmail')} not found"}), 404
+            return render_template('card/response.html', response="error", message=f"Cliente com e-mail {request.form.get('cardHolderEmail')} não encontrado")
 
         card_data = {
             "token": data["token"]
         }
         card = CARD_PROXY.add_card(client[0]["id"], card_data)
 
-        return jsonify(card), 200
+        print(card)
+        return render_template('card/response.html', response="successful", message="Cartão registrado com sucesso!")
     else:
         return render_template('card/card_register.html', payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY)
 
@@ -107,14 +108,14 @@ def update_card(customer_id, card_id):
     card_data = request.get_json()
     response = CARD_PROXY.update_card(customer_id, card_id, card_data)
     print(response)
-    return jsonify({}), 200
+    return render_template('card/response.html', response="successful", message="Cartão atualizado com sucesso!")
 
 
 @card_bp.route('/card/<customer_id>/<card_id>/delete/', methods=['GET', ])
 def delete_card(customer_id, card_id):
     response = CARD_PROXY.delete_card(customer_id, card_id)
     print(response)
-    return jsonify({}), 200
+    return render_template('card/response.html', response="successful", message="Cartão deletado com sucesso!")
 
 
 @card_bp.route('/card/customer_id>/<card_id>/', methods=['GET', ])
@@ -131,7 +132,7 @@ def get_cards():
         client = response["results"]
 
         if len(client) == 0:
-            return jsonify({"Error": f"Client with e-mail {request.form.get('cardHolderEmail')} not found"}), 404
+            return render_template('card/response.html', response="error", message=f"Cliente com e-mail {request.form.get('cardHolderEmail')} não encontrado")
 
         cards = CARD_PROXY.get_cards(client[0]["id"])
         return render_template('card/cards.html', cards=cards)

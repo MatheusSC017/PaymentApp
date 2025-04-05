@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Approved</title>
+    <title>{{ response.capitalize() }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="status-container success" id="payment-approved">
-        <div class="status-icon">✅</div>
-        <div class="status-message">Payment Approved! 🎉</div>
+    <div class="status-container {{ response }}">
+        <div class="status-message">{{ message }}</div>
         <button class="btn-back" onclick="window.location.href='/'">Go Back Home</button>
     </div>
 </body>
