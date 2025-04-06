@@ -103,7 +103,7 @@ def register_card():
         return render_template('card/card_register.html', payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY)
 
 
-@card_bp.route('/card/<customer_id>/<card_id>/', methods=['GET', ])
+@card_bp.route('/card/<customer_id>/<card_id>/', methods=['POST', ])
 def update_card(customer_id, card_id):
     card_data = request.get_json()
     response = CARD_PROXY.update_card(customer_id, card_id, card_data)
@@ -114,15 +114,13 @@ def update_card(customer_id, card_id):
 @card_bp.route('/card/<customer_id>/<card_id>/delete/', methods=['GET', ])
 def delete_card(customer_id, card_id):
     response = CARD_PROXY.delete_card(customer_id, card_id)
-    print(response)
     return render_template('card/response.html', response="successful", message="Cartão deletado com sucesso!")
 
 
-@card_bp.route('/card/customer_id>/<card_id>/', methods=['GET', ])
+@card_bp.route('/card/<customer_id>/<card_id>/', methods=['GET', ])
 def get_card(customer_id, card_id):
-    response = CARD_PROXY.get_card(customer_id, card_id)
-    print(response)
-    return jsonify({}), 200
+    card = CARD_PROXY.get_card(customer_id, card_id)
+    return render_template('card/card.html', card=card)
 
 
 @card_bp.route('/card/search/', methods=['GET', 'POST'])
