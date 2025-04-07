@@ -96,8 +96,9 @@ def register_card():
             "token": data["token"]
         }
         card = CARD_PROXY.add_card(client[0]["id"], card_data)
+        if card is None:
+            return render_template('card/response.html', response="error", message="Erro durante o cadastramento do cartão.")
 
-        print(card)
         return render_template('card/response.html', response="successful", message="Cartão registrado com sucesso!")
     else:
         return render_template('card/card_register.html', payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY)
@@ -107,19 +108,24 @@ def register_card():
 def update_card(customer_id, card_id):
     card_data = request.get_json()
     response = CARD_PROXY.update_card(customer_id, card_id, card_data)
-    print(response)
+    if response is None:
+        return render_template('card/response.html', response="error", message="Erro durante atualização do cartão.")
     return render_template('card/response.html', response="successful", message="Cartão atualizado com sucesso!")
 
 
 @card_bp.route('/card/<customer_id>/<card_id>/delete/', methods=['GET', ])
 def delete_card(customer_id, card_id):
     response = CARD_PROXY.delete_card(customer_id, card_id)
+    if response is None:
+        return render_template('card/response.html', response="error", message="Erro durante a exclusão do cartão.")
     return render_template('card/response.html', response="successful", message="Cartão deletado com sucesso!")
 
 
 @card_bp.route('/card/<customer_id>/<card_id>/', methods=['GET', ])
 def get_card(customer_id, card_id):
     card = CARD_PROXY.get_card(customer_id, card_id)
+    if card is None:
+        return render_template('card/response.html', response="error", message="Cartão não encontrado.")
     return render_template('card/card.html', card=card)
 
 
@@ -133,6 +139,9 @@ def get_cards():
             return render_template('card/response.html', response="error", message=f"Cliente com e-mail {request.form.get('cardHolderEmail')} não encontrado")
 
         cards = CARD_PROXY.get_cards(client[0]["id"])
+        if cards is None:
+            return render_template('card/response.html', response="error", message="Nenhum cartão encontrado para este e-mail.")
+
         return render_template('card/cards.html', cards=cards)
     else:
         return render_template('card/card_search.html')

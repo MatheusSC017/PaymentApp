@@ -12,7 +12,7 @@ class CardProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def update_card(self, customer_id, card_id, card_data):
         response = self.MP_SDK.card().update(customer_id, card_id, card_data)
@@ -21,7 +21,7 @@ class CardProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def delete_card(self, customer_id, card_id):
         response = self.MP_SDK.card().delete(customer_id, card_id)
@@ -30,7 +30,7 @@ class CardProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def get_card(self, customer_id, card_id):
         response = self.MP_SDK.card().get(customer_id, card_id)
@@ -39,7 +39,7 @@ class CardProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def get_cards(self, customer_id):
         response = self.MP_SDK.card().list_all(customer_id)
@@ -48,7 +48,7 @@ class CardProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
 
 if __name__ == "__main__":
