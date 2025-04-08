@@ -13,7 +13,7 @@ class ClientProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def update_client(self, id, client):
         response = self.MP_SDK.customer().update(id, client.get_formatted_data(include_email=False))
@@ -23,7 +23,7 @@ class ClientProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def get_clients(self, email):
         response = self.MP_SDK.customer().search({"email": email})
@@ -33,7 +33,7 @@ class ClientProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def get_client(self, id):
         response = self.MP_SDK.customer().get(id)
@@ -43,7 +43,7 @@ class ClientProxy:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
 
 class Client:

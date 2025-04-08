@@ -3,6 +3,7 @@ from .routes.pix import pix_bp
 from .routes.card import card_bp
 from .routes.bill import bill_bp
 from .routes.checkout import checkout_bp
+from .routes.client import client_bp
 from dotenv import load_dotenv
 import os
 
@@ -37,3 +38,4 @@ def initialize_routes(app):
     app.register_blueprint(pix_bp)
     app.register_blueprint(bill_bp)
     app.register_blueprint(checkout_bp)
+    app.register_blueprint(client_bp)

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ response.capitalize() }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="status-container {{ response }}">
+        <div class="status-message">{{ message }}</div>
+        <button class="btn-back" onclick="window.location.href='/'">Voltar</button>
+    </div>
+</body>
+</html>

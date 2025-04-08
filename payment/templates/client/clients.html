@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div>
+        <h1 class="page-title">Clientes</h1>
+
+        <div class="user-container">
+            {% for user in clients['results'] %}
+            <div class="user-card">
+                <h3><a href="{{ url_for('client.get_client', client_id=user.id) }}">{{ user.first_name or "N/A" }} {{ user.last_name or "" }}</a></h3>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Description:</strong> {{ user.description or "N/A" }}</p>
+                <p><strong>CPF:</strong> {{ user.identification.number or "N/A" }}</p>
+                <p><strong>Live Mode:</strong> {{ user.live_mode }}</p>
+
+                {% if user.phone.area_code or user.phone.number %}
+                <p><strong>Phone:</strong> ({{ user.phone.area_code or "" }}) {{ user.phone.number or "" }}</p>
+                {% endif %}
+
+                {% if user.address.street_name %}
+                <div class="section-title">Address:</div>
+                <div class="address">
+                    <p>{{ user.address.street_name }}, {{ user.address.street_number or "N/A" }}</p>
+                    <p>ZIP: {{ user.address.zip_code or "N/A" }}</p>
+                    <p>City: {{ user.address.city.name or "N/A" }}</p>
+                </div>
+                {% endif %}
+
+                {% if user.cards %}
+                <div class="section-title">Cards:</div>
+                {% for card in user.cards %}
+                <div class="card">
+                    <p><strong>Cardholder:</strong> {{ card.cardholder.name }}</p>
+                    <p>**** **** **** {{ card.last_four_digits }}</p>
+                    <p>Expires: {{ card.expiration_month }}/{{ card.expiration_year }}</p>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

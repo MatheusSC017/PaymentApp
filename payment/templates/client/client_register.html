@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar cliente</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastrar novo cliente</h2>
+        <form method="POST" action="/register-client">
+            <label>Email:
+                <input type="email" name="email" required>
+            </label>
+
+            <label>First Name:
+                <input type="text" name="first_name" required>
+            </label>
+
+            <label>Last Name:
+                <input type="text" name="last_name" required>
+            </label>
+
+            <fieldset>
+                <legend>Phone</legend>
+                <label>Area Code:
+                    <input type="text" name="phone_area_code">
+                </label>
+                <label>Number:
+                    <input type="text" name="phone_number">
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Identification</legend>
+                <label>Type:
+                    <input type="text" name="identification_type">
+                </label>
+                <label>Number:
+                    <input type="text" name="identification_number">
+                </label>
+            </fieldset>
+
+            <label>Default Address (true/false):
+                <input type="text" name="default_address">
+            </label>
+
+            <fieldset>
+                <legend>Address</legend>
+                <label>Address ID:
+                    <input type="text" name="address_id">
+                </label>
+                <label>ZIP Code:
+                    <input type="text" name="address_zip_code">
+                </label>
+                <label>Street Name:
+                    <input type="text" name="address_street_name">
+                </label>
+                <label>Street Number:
+                    <input type="text" name="address_street_number">
+                </label>
+                <label>City:
+                    <input type="text" name="address_city">
+                </label>
+            </fieldset>
+
+            <label>Date Registered:
+                <input type="date" name="date_registered">
+            </label>
+
+            <label>Description:
+                <textarea name="description"></textarea>
+            </label>
+
+            <label>Default Card (Optional):
+                <input type="text" name="default_card">
+            </label>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>
