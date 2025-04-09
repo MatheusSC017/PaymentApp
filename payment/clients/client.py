@@ -122,8 +122,8 @@ if __name__ == "__main__":
 
     client_proxy = ClientProxy()
 
-    response = client_proxy.add_client(client)
-    print(response)
+    # response = client_proxy.add_client(client)
+    # print(response)
 
     # response = client_proxy.get_clients("test@test.com")
     # print(response)

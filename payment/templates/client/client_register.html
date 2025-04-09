@@ -2,82 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastrar cliente</title>
-    <link rel="stylesheet" href="style.css">
+    <title>{{ 'Atualizar Cliente' if client else 'Cadastrar cliente' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h2>Cadastrar novo cliente</h2>
-        <form method="POST" action="/register-client">
-            <label>Email:
-                <input type="email" name="email" required>
+    <form method="POST" action="{{ url_for('client.update_client', client_id=client.id) if client else url_for('client.register_client') }}" class="form">
+        <h2>{{ 'Update Client' if client else 'Register New Client' }}</h2>
+
+        {% if client %}
+        <input type="hidden" name="id" value="{{ client.id }}">
+        {% endif %}
+
+        <label>Email:
+            <input type="email" name="email" value="{{ client.email if client else '' }}" {% if client %}readonly{% else %}required{% endif %}>
+        </label>
+
+        <label>First Name:
+            <input type="text" name="first_name" value="{{ client.first_name if client else '' }}" required>
+        </label>
+
+        <label>Last Name:
+            <input type="text" name="last_name" value="{{ client.last_name if client else '' }}" required>
+        </label>
+
+        <fieldset>
+            <legend>Phone</legend>
+            <label>Area Code:
+                <input type="text" name="phone_area_code" value="{{ client.phone.area_code if client else '' }}">
             </label>
-
-            <label>First Name:
-                <input type="text" name="first_name" required>
+            <label>Number:
+                <input type="text" name="phone_number" value="{{ client.phone.number if client else '' }}">
             </label>
+        </fieldset>
 
-            <label>Last Name:
-                <input type="text" name="last_name" required>
+        <fieldset>
+            <legend>Identification</legend>
+            <label>Type:
+                <input type="text" name="identification_type" value="{{ client.identification.type if client else '' }}">
             </label>
-
-            <fieldset>
-                <legend>Phone</legend>
-                <label>Area Code:
-                    <input type="text" name="phone_area_code">
-                </label>
-                <label>Number:
-                    <input type="text" name="phone_number">
-                </label>
-            </fieldset>
-
-            <fieldset>
-                <legend>Identification</legend>
-                <label>Type:
-                    <input type="text" name="identification_type">
-                </label>
-                <label>Number:
-                    <input type="text" name="identification_number">
-                </label>
-            </fieldset>
-
-            <label>Default Address (true/false):
-                <input type="text" name="default_address">
+            <label>Number:
+                <input type="text" name="identification_number" value="{{ client.identification.number if client else '' }}">
             </label>
+        </fieldset>
 
-            <fieldset>
-                <legend>Address</legend>
-                <label>Address ID:
-                    <input type="text" name="address_id">
-                </label>
-                <label>ZIP Code:
-                    <input type="text" name="address_zip_code">
-                </label>
-                <label>Street Name:
-                    <input type="text" name="address_street_name">
-                </label>
-                <label>Street Number:
-                    <input type="text" name="address_street_number">
-                </label>
-                <label>City:
-                    <input type="text" name="address_city">
-                </label>
-            </fieldset>
+        <label>Default Address (true/false):
+            <input type="text" name="default_address" value="{{ client.default_address if client else '' }}">
+        </label>
 
-            <label>Date Registered:
-                <input type="date" name="date_registered">
+        <fieldset>
+            <legend>Address</legend>
+            <label>Address ID:
+                <input type="text" name="address_id" value="{{ client.address.id if client else '' }}">
             </label>
-
-            <label>Description:
-                <textarea name="description"></textarea>
+            <label>ZIP Code:
+                <input type="text" name="address_zip_code" value="{{ client.address.zip_code if client else '' }}">
             </label>
-
-            <label>Default Card (Optional):
-                <input type="text" name="default_card">
+            <label>Street Name:
+                <input type="text" name="address_street_name" value="{{ client.address.street_name if client else '' }}">
             </label>
+            <label>Street Number:
+                <input type="text" name="address_street_number" value="{{ client.address.street_number if client else '' }}">
+            </label>
+            <label>City:
+                <input type="text" name="address_city" value="{{ client.address.city if client else '' }}">
+            </label>
+        </fieldset>
 
-            <button type="submit">Register</button>
-        </form>
-    </div>
+        <label>Date Registered:
+            <input type="date" name="date_registered" value="{{ client.date_registered[:10] if client else '' }}">
+        </label>
+
+        <label>Description:
+            <textarea name="description">{{ client.description if client else '' }}</textarea>
+        </label>
+
+        <label>Default Card (Optional):
+            <input type="text" name="default_card" value="{{ client.default_card if client else '' }}">
+        </label>
+
+        <button type="submit">{{ 'Atualizar' if client else 'Cadastrar' }}</button>
+    </form>
 </body>
 </html>

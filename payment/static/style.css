@@ -13,7 +13,7 @@ body {
     background: linear-gradient(to right, #D84040, #A31D1D);
 }
 
-#form-checkout {
+.form {
     background: #ffffff;
     padding: 40px;
     border-radius: 20px;
@@ -135,7 +135,7 @@ button:hover {
 }
 
 @media (max-width: 600px) {
-    #form-checkout,
+    .form,
     .status-container {
         padding: 20px;
         border-radius: 15px;

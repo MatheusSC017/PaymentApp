@@ -12,7 +12,7 @@
         <div class="user-container">
             {% for user in clients['results'] %}
             <div class="user-card">
-                <h3><a href="{{ url_for('client.get_client', client_id=user.id) }}">{{ user.first_name or "N/A" }} {{ user.last_name or "" }}</a></h3>
+                <h3>{{ user.first_name or "N/A" }} {{ user.last_name or "" }}</h3>
                 <p><strong>Email:</strong> {{ user.email }}</p>
                 <p><strong>Description:</strong> {{ user.description or "N/A" }}</p>
                 <p><strong>CPF:</strong> {{ user.identification.number or "N/A" }}</p>
@@ -41,6 +41,9 @@
                 </div>
                 {% endfor %}
                 {% endif %}
+
+                <a href="{{ url_for('client.get_client', client_id=user.id) }}"><button>Selecionar</button></a>
+                <a href="{{ url_for('client.update_client', client_id=user.id) }}"><button>Atualizar</button></a>
             </div>
             {% endfor %}
         </div>

@@ -7,16 +7,16 @@
 </head>
 <body>
 
-    <form id="form-checkout" action="{{ url_for('bill.process_payment') }}" method="post">
+    <form id="form" action="{{ url_for('bill.process_payment') }}" method="post">
         <div>
             <h1>Payer Request</h1>
             <div>
                 <label for="payerFirstName">Nome</label>
-                <input id="form-checkout__payerFirstName" name="payerFirstName" type="text">
+                <input id="form__payerFirstName" name="payerFirstName" type="text">
             </div>
              <div>
                 <label for="payerLastName">Sobrenome</label>
-                <input id="form-checkout__payerLastName" name="payerLastName" type="text">
+                <input id="form__payerLastName" name="payerLastName" type="text">
              </div>
              <div>
                 <label for="email">E-mail</label>

@@ -1,5 +1,5 @@
 from flask.blueprints import Blueprint
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect, url_for
 from payment.payments.card import Card, PaymentData
 from payment.clients.client import ClientProxy
 from payment.clients.card import CardProxy
@@ -99,7 +99,7 @@ def register_card():
         if card is None:
             return render_template('card/response.html', response="error", message="Erro durante o cadastramento do cartão.")
 
-        return render_template('card/response.html', response="successful", message="Cartão registrado com sucesso!")
+        return redirect(url_for("card.get_card", customer_id=client[0]["id"], card_id=card["id"]), 302)
     else:
         return render_template('card/card_register.html', payment_mp_public_key=CARD_PAYMENT.MP_PUBLIC_KEY)
 
