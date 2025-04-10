@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'Update Plan' if plan else 'Register Plan' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <form method="POST" action="{{ url_for('plan.update_plan', plan_id=plan.id) if plan else url_for('plan.register_plan') }}" class="form">
+        <h2>{{ 'Update Plan' if plan else 'Register New Plan' }}</h2>
+
+        {% if plan %}
+        <input type="hidden" name="id" value="{{ plan.id }}">
+        {% endif %}
+
+        <label>Razão:
+            <input type="text" name="reason" value="{{ plan.reason if plan else '' }}" required>
+        </label>
+
+        <label>URL de retorno:
+            <input type="text" name="back_url" value="{{ plan.back_url if plan else '' }}" required>
+        </label>
+
+        <fieldset>
+            <legend>Recorrência</legend>
+
+            <label>Frequência:
+                <input type="number" name="frequency" value="{{ plan.auto_recurring.frequency if plan else '' }}" required>
+            </label>
+
+            <label>Tipo da frequência:
+                <select name="frequency_type" required>
+                    <option value="days" {% if plan and plan.auto_recurring.frequency_type == 'days' %}selected{% endif %}>Dias</option>
+                    <option value="months" {% if plan and plan.auto_recurring.frequency_type == 'months' %}selected{% endif %}>Meses</option>
+                </select>
+            </label>
+
+            <label>Repetições:
+                <input type="number" name="repetitions" value="{{ plan.auto_recurring.repetitions if plan else '' }}" required>
+            </label>
+
+            <label>Dia da cobrança:
+                <input type="number" name="billing_day" min="1" max="28" value="{{ plan.auto_recurring.billing_day if plan else '' }}">
+            </label>
+
+            <label>Cobrança proporcional:
+                <select name="billing_day_proportional" required>
+                    <option value="true" {% if plan and plan.auto_recurring.free_trial == 'true' %}selected{% endif %}>Sim</option>
+                    <option value="false" {% if plan and plan.auto_recurring.free_trial == 'false' %}selected{% endif %}>Não</option>
+                </select>
+            </label>
+
+            <label>Período de testes:
+                <input type="number" name="free_trial_frequency" value="{{ plan.auto_recurring.free_trial.frequency if plan else '' }}">
+            </label>
+
+            <label>Valor da transação:
+                <input type="number" step="0.01" name="transaction_amount" value="{{ plan.auto_recurring.transaction_amount if plan else '' }}" required>
+            </label>
+
+            <label>Moeda:
+                <select name="currency_id" required>
+                    <option value="BRL" {% if plan and plan.auto_recurring.currency_id == 'BRL' %}selected{% endif %}>Real Brasileiro</option>
+                    <option value="USD" {% if plan and plan.auto_recurring.currency_id == 'USD' %}selected{% endif %}>Dollar</option>
+                    <option value="ARS" {% if plan and plan.auto_recurring.currency_id == 'ARS' %}selected{% endif %}>Peso Argentino</option>
+                    <option value="PEN" {% if plan and plan.auto_recurring.currency_id == 'PEN' %}selected{% endif %}>Sol Peruano</option>
+                    <option value="COP" {% if plan and plan.auto_recurring.currency_id == 'COP' %}selected{% endif %}>Peso Colombiano</option>
+                    <option value="UYU" {% if plan and plan.auto_recurring.currency_id == 'UYU' %}selected{% endif %}>Peso Uruguayo</option>
+                    <option value="VES" {% if plan and plan.auto_recurring.currency_id == 'VES' %}selected{% endif %}>Bolivar Venezolano</option>
+                    <option value="CLP" {% if plan and plan.auto_recurring.currency_id == 'CLP' %}selected{% endif %}>Peso Chileno</option>
+                    <option value="MXN" {% if plan and plan.auto_recurring.currency_id == 'MXN' %}selected{% endif %}>Peso mexicano</option>
+                </select>
+            </label>
+        </fieldset>
+
+        <button type="submit">{{ 'Atualizar' if plan else 'Cadastrar' }}</button>
+    </form>
+</body>
+</html>

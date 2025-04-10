@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscriptions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div>
+        <h1 class="page-title">Planos de Assinatura</h1>
+        <div class="card">
+            <h3>{{ subscription.reason }}</h3>
+            <p><strong>Status:</strong> {{ subscription.status }}</p>
+            <p><strong>Valor:</strong> R$ {{ subscription.auto_recurring.transaction_amount }} / {{ subscription.auto_recurring.frequency_type }}</p>
+            <p><strong>Repetições:</strong> {{ subscription.auto_recurring.repetitions }}</p>
+            <p><strong>Criado em:</strong> {{ subscription.date_created }}</p>
+            <p><strong>Última Modificação:</strong> {{ subscription.last_modified }}</p>
+            <p><strong>Billing Day:</strong> Dia {{ subscription.auto_recurring.billing_day }}</p>
+            <p><strong>Teste Grátis:</strong> {{ subscription.auto_recurring.free_trial.frequency }} {{ subscription.auto_recurring.free_trial.frequency_type }}</p>
+            <p><strong>Moeda:</strong> {{ subscription.auto_recurring.currency_id }}</p>
+            <p><strong>Coletor ID:</strong> {{ subscription.collector_id }}</p>
+            <p><strong>Subscritos:</strong> {{ subscription.subscribed }}</p>
+            <p><strong>Application ID:</strong> {{ subscription.application_id }}</p>
+
+            <div style="margin-top: 15px;">
+                <a href="{{ subscription.init_point }}" target="_blank"><button>Ver Checkout</button></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

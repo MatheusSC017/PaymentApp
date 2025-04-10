@@ -23,7 +23,7 @@ class SignaturePlan:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def update_signature_plan(self, id, reason, auto_recurring, back_url):
         data = {
@@ -43,7 +43,7 @@ class SignaturePlan:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def get_signature_plans(self):
         response = self.MP_SDK.plan().search()
@@ -53,9 +53,12 @@ class SignaturePlan:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
     def get_signature_plan(self, id):
+        if id == "search":
+            return None
+
         response = self.MP_SDK.plan().get(id)
 
         if response["status"] == 200:
@@ -63,7 +66,7 @@ class SignaturePlan:
 
         print(response["status"])
         print(response["response"])
-        return {}
+        return None
 
 
 class AutoRecurring:

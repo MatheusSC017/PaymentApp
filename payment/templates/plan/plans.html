@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscriptions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div>
+        <h1 class="page-title">Planos de Assinatura</h1>
+
+        <div class="items-container">
+            {% for sub in subscriptions['results'] %}
+            <div class="card">
+                <h3>{{ sub.reason }}</h3>
+                <p><strong>Status:</strong> {{ sub.status }}</p>
+                <p><strong>Valor:</strong> R$ {{ sub.auto_recurring.transaction_amount }} / {{ sub.auto_recurring.frequency_type }}</p>
+                <p><strong>Repetições:</strong> {{ sub.auto_recurring.repetitions }}</p>
+                <p><strong>Criado em:</strong> {{ sub.date_created }}</p>
+                <p><strong>Última Modificação:</strong> {{ sub.last_modified }}</p>
+                <p><strong>Billing Day:</strong> Dia {{ sub.auto_recurring.billing_day }}</p>
+                <p><strong>Teste Grátis:</strong> {{ sub.auto_recurring.free_trial.frequency }} {{ sub.auto_recurring.free_trial.frequency_type }}</p>
+                <p><strong>Moeda:</strong> {{ sub.auto_recurring.currency_id }}</p>
+                <p><strong>Coletor ID:</strong> {{ sub.collector_id }}</p>
+                <p><strong>Subscritos:</strong> {{ sub.subscribed }}</p>
+                <p><strong>Application ID:</strong> {{ sub.application_id }}</p>
+
+                <div style="margin-top: 15px;">
+                    <a href="{{ url_for('plan.get_plan', plan_id=sub.id) }}"><button>Selecionar</button></a>
+                    <a href="{{ url_for('plan.update_plan', plan_id=sub.id) }}"><button>Atualizar</button></a>
+                    <a href="{{ sub.init_point }}"><button>Ver Checkout</button></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

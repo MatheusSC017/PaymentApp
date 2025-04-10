@@ -159,7 +159,7 @@ button:hover {
     padding-top: 30px;
 }
 
-.user-container {
+.items-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -167,7 +167,7 @@ button:hover {
     padding: 40px;
 }
 
-.user-card {
+.card {
     background: #ffffff;
     padding: 20px;
     border-radius: 15px;
@@ -177,12 +177,12 @@ button:hover {
     box-sizing: border-box;
 }
 
-.user-card h3 {
+.card h3 {
     margin-top: 0;
     color: #2E8B57;
 }
 
-.user-card p {
+.card p {
     margin: 5px 0;
 }
 
@@ -208,11 +208,11 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-    .user-card {
+    .card {
         max-width: 100%;
     }
 
-    .user-container {
+    .items-container {
         padding: 20px;
     }
 }
@@ -279,7 +279,7 @@ button:hover {
     padding: 2rem;
 }
 
-.user-card, .wide-card {
+.card, .wide-card {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box;
@@ -320,4 +320,28 @@ button:hover {
     font-size: 1.3rem;
     font-weight: bold;
     margin: 1rem 0 0.5rem;
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+fieldset legend {
+    font-weight: bold;
+    padding: 0 10px;
+    color: #4CAF50;
+}
+
+fieldset label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+fieldset input,
+fieldset select {
+    margin-top: 5px;
+    width: 100%;
 }

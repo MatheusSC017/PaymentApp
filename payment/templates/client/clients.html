@@ -9,9 +9,9 @@
     <div>
         <h1 class="page-title">Clientes</h1>
 
-        <div class="user-container">
+        <div class="items-container">
             {% for user in clients['results'] %}
-            <div class="user-card">
+            <div class="card">
                 <h3>{{ user.first_name or "N/A" }} {{ user.last_name or "" }}</h3>
                 <p><strong>Email:</strong> {{ user.email }}</p>
                 <p><strong>Description:</strong> {{ user.description or "N/A" }}</p>

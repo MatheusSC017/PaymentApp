@@ -90,14 +90,14 @@ def register_card():
         client = response["results"]
 
         if len(client) == 0:
-            return render_template('card/response.html', response="error", message=f"Cliente com e-mail {request.form.get('cardHolderEmail')} não encontrado")
+            return render_template("card/response.html", response="error", message=f"Cliente com e-mail {request.form.get('cardHolderEmail')} não encontrado")
 
         card_data = {
             "token": data["token"]
         }
         card = CARD_PROXY.add_card(client[0]["id"], card_data)
         if card is None:
-            return render_template('card/response.html', response="error", message="Erro durante o cadastramento do cartão.")
+            return render_template("card/response.html", response="error", message="Erro durante o cadastramento do cartão.")
 
         return redirect(url_for("card.get_card", customer_id=client[0]["id"], card_id=card["id"]), 302)
     else:
