@@ -96,6 +96,7 @@ def register_card():
             "token": data["token"]
         }
         card = CARD_PROXY.add_card(client[0]["id"], card_data)
+
         if card is None:
             return render_template("card/response.html", response="error", message="Erro durante o cadastramento do cartão.")
 
@@ -132,8 +133,9 @@ def get_card(customer_id, card_id):
 @card_bp.route('/card/search/', methods=['GET', 'POST'])
 def get_cards():
     if request.method == "POST":
-        response = CLIENT_PROXY.get_clients(request.form.get("cardHolderEmail"))
-        client = response["results"]
+        email = request.form.get("cardHolderEmail")
+        response = CLIENT_PROXY.get_clients(email)
+        client = [client for client in response["results"] if client.get("email") == email]
 
         if len(client) == 0:
             return render_template('card/response.html', response="error", message=f"Cliente com e-mail {request.form.get('cardHolderEmail')} não encontrado")
@@ -142,6 +144,7 @@ def get_cards():
         if cards is None:
             return render_template('card/response.html', response="error", message="Nenhum cartão encontrado para este e-mail.")
 
+        print(cards)
         return render_template('card/cards.html', cards=cards)
     else:
         return render_template('card/card_search.html')

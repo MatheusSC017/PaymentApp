@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Assinatura - Detalhes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="client-container">
+        <h1 class="page-title">Detalhes da Assinatura</h1>
+
+        <div class="card wide-card">
+            <div class="info-row">
+                <p><strong>ID do Plano:</strong> {{ subscription.preapproval_plan_id }}</p>
+                <p><strong>Motivo:</strong> {{ subscription.reason }}</p>
+                <p><strong>Referência Externa:</strong> {{ subscription.external_reference }}</p>
+                <p><strong>Email do Pagador:</strong> {{ subscription.payer_email }}</p>
+                <p><strong>ID do Cartão:</strong> {{ subscription.card_token_id }}</p>
+                <p><strong>Status:</strong> {{ subscription.status }}</p>
+                <p><strong>URL de Retorno:</strong> <a href="{{ subscription.back_url }}" target="_blank">{{ subscription.back_url }}</a></p>
+            </div>
+
+            <div class="section-title">Recorrência Automática</div>
+            <div class="info-row">
+                <p><strong>Frequência:</strong> {{ subscription.auto_recurring.frequency }}</p>
+                <p><strong>Tipo de Frequência:</strong> {{ subscription.auto_recurring.frequency_type }}</p>
+                <p><strong>Data de Início:</strong> {{ subscription.auto_recurring.start_date }}</p>
+                <p><strong>Data de Término:</strong> {{ subscription.auto_recurring.end_date }}</p>
+                <p><strong>Valor:</strong> {{ subscription.auto_recurring.transaction_amount }}</p>
+                <p><strong>Moeda:</strong> {{ subscription.auto_recurring.currency_id }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

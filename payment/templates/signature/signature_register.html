@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscrição</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <form method="POST" action="" class="form">
+        <h2>Assinatura do plano</h2>
+
+        <label>ID do plano:
+            <select name="plan_id" required>
+                {% for plan in plans %}
+                    <option value="{{ plan.id }}">{{ plan.reason }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>Referência externa:
+            <input type="text" name="external_reference" required>
+        </label>
+
+        <label>E-mail:
+            <input type="email" name="payer_email" required>
+        </label>
+
+        <label>Numero do Cartão:
+            <input type="text" name="card_number" required>
+        </label>
+
+        <label>Data de expiração:
+            <input type="month" name="card_expiration_data" required>
+        </label>
+
+        <label>Código de segurança:
+            <input type="number" min="100" max="999" name="card_security_code"  required>
+        </label>
+
+        <label>Nome no cartão:
+            <input type="text" name="card_holder"  required>
+        </label>
+
+        <fieldset>
+            <legend>Identificação</legend>
+            <label>Tipo:
+                <input type="text" name="identification_type">
+            </label>
+            <label>Número:
+                <input type="text" name="identification_number">
+            </label>
+        </fieldset>
+
+        <button type="submit">Inscrever-se</button>
+    </form>
+</body>
+</html>

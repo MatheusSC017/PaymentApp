@@ -7,76 +7,76 @@
 </head>
 <body>
     <form method="POST" action="{{ url_for('client.update_client', client_id=client.id) if client else url_for('client.register_client') }}" class="form">
-        <h2>{{ 'Update Client' if client else 'Register New Client' }}</h2>
+        <h2>{{ 'Atualizar Cliente' if client else 'Cadastrar cliente' }}</h2>
 
         {% if client %}
         <input type="hidden" name="id" value="{{ client.id }}">
         {% endif %}
 
-        <label>Email:
+        <label>E-mail:
             <input type="email" name="email" value="{{ client.email if client else '' }}" {% if client %}readonly{% else %}required{% endif %}>
         </label>
 
-        <label>First Name:
+        <label>Primeiro nome:
             <input type="text" name="first_name" value="{{ client.first_name if client else '' }}" required>
         </label>
 
-        <label>Last Name:
+        <label>Último nome:
             <input type="text" name="last_name" value="{{ client.last_name if client else '' }}" required>
         </label>
 
         <fieldset>
-            <legend>Phone</legend>
-            <label>Area Code:
+            <legend>Telefone</legend>
+            <label>Código de área:
                 <input type="text" name="phone_area_code" value="{{ client.phone.area_code if client else '' }}">
             </label>
-            <label>Number:
+            <label>Número:
                 <input type="text" name="phone_number" value="{{ client.phone.number if client else '' }}">
             </label>
         </fieldset>
 
         <fieldset>
-            <legend>Identification</legend>
-            <label>Type:
+            <legend>Identificação</legend>
+            <label>Tipo:
                 <input type="text" name="identification_type" value="{{ client.identification.type if client else '' }}">
             </label>
-            <label>Number:
+            <label>Número:
                 <input type="text" name="identification_number" value="{{ client.identification.number if client else '' }}">
             </label>
         </fieldset>
 
-        <label>Default Address (true/false):
+        <label>Endereço padrão:
             <input type="text" name="default_address" value="{{ client.default_address if client else '' }}">
         </label>
 
         <fieldset>
-            <legend>Address</legend>
-            <label>Address ID:
+            <legend>Endereço</legend>
+            <label>ID:
                 <input type="text" name="address_id" value="{{ client.address.id if client else '' }}">
             </label>
-            <label>ZIP Code:
+            <label>Código postal:
                 <input type="text" name="address_zip_code" value="{{ client.address.zip_code if client else '' }}">
             </label>
-            <label>Street Name:
+            <label>Nome da rua:
                 <input type="text" name="address_street_name" value="{{ client.address.street_name if client else '' }}">
             </label>
-            <label>Street Number:
+            <label>Número:
                 <input type="text" name="address_street_number" value="{{ client.address.street_number if client else '' }}">
             </label>
-            <label>City:
+            <label>Cidade:
                 <input type="text" name="address_city" value="{{ client.address.city if client else '' }}">
             </label>
         </fieldset>
 
-        <label>Date Registered:
+        <label>Data de registro:
             <input type="date" name="date_registered" value="{{ client.date_registered[:10] if client else '' }}">
         </label>
 
-        <label>Description:
+        <label>Descrição:
             <textarea name="description">{{ client.description if client else '' }}</textarea>
         </label>
 
-        <label>Default Card (Optional):
+        <label>Cartão padrão (Opcional):
             <input type="text" name="default_card" value="{{ client.default_card if client else '' }}">
         </label>
 

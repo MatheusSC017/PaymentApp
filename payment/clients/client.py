@@ -26,7 +26,7 @@ class ClientProxy:
         return None
 
     def get_clients(self, email):
-        response = self.MP_SDK.customer().search({"email": email})
+        response = self.MP_SDK.customer().search(filters={"email": email})
 
         if response["status"] == 200:
             return response["response"]
@@ -128,8 +128,8 @@ if __name__ == "__main__":
     # response = client_proxy.get_clients("test@test.com")
     # print(response)
 
-    # response = client_proxy.get_client("2356245804-D6qA5TtnMTdG3O")
-    # print(response)
+    response = client_proxy.get_client("2356245804-D6qA5TtnMTdG3O")
+    print(response)
 
     # client.last_name = "Smith"
     # response = client_proxy.update_client("2356245804-D6qA5TtnMTdG3O", client)
