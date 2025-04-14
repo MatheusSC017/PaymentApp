@@ -17,8 +17,7 @@ def register_signature():
         plan = SIGNATURE_PLAN.get_signature_plan(data.get("plan_id"))
 
         if plan is None:
-            return render_template("signature/response.html", response="error",
-                                   message="Erro durante busca do plano de assinatura selecionado.")
+            return render_template("signature/response.html", response="error", message="Erro durante busca do plano de assinatura selecionado.")
 
         start_date = datetime.now(timezone.utc)
         frequency = plan["auto_recurring"]["frequency"]
@@ -37,8 +36,7 @@ def register_signature():
                                             data.get("identification_type"), data.get("identification_number"))
 
         if card_token_id is None:
-            return render_template("signature/response.html", response="error",
-                                   message="Erro durante criação do token de cartão.")
+            return render_template("signature/response.html", response="error", message="Erro durante criação do token de cartão.")
 
         signature_data = SignatureData(
             plan_id=plan["id"],
@@ -59,24 +57,17 @@ def register_signature():
         subscription = SIGNATURE.add_signature(signature_data)
 
         if subscription is None:
-            return render_template("signature/response.html", response="error",
-                                   message="Erro durante cadastramento da assinatura.")
+            return render_template("signature/response.html", response="error", message="Erro durante cadastramento da assinatura.")
 
         return render_template("signature/signature.html", subscription=subscription)
     else:
         plans = SIGNATURE_PLAN.get_signature_plans()
 
         if plans is None:
-            return render_template("signature/response.html", response="error",
-                                   message="Erro durante busca dos planos de assinaturas.")
+            return render_template("signature/response.html", response="error", message="Erro durante busca dos planos de assinaturas.")
 
         plans = [{"id": p["id"], "reason": p["reason"]} for p in plans["results"]]
         return render_template('signature/signature_register.html', plans=plans)
-
-
-@signature_bp.route("/signature/<signature_id>/update/", methods=["GET", "POST"])
-def update_signature(signature_id):
-    return "Signature"
 
 
 @signature_bp.route("/signature/", methods=["GET", "POST"])
