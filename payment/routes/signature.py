@@ -82,18 +82,22 @@ def update_signature(signature_id):
 @signature_bp.route("/signature/", methods=["GET", "POST"])
 def get_signatures():
     if request.method == "POST":
-        signatures = SIGNATURE.get_signatures(request.form.get("payerEmail"))
+        subscriptions = SIGNATURE.get_signatures(request.form.get("payerEmail"))
 
-        print(signatures)
-        if signatures is None:
+        if subscriptions is None:
             return render_template("signature/response.html", response="error", message="Erro durante busca das assinaturas.")
 
-        return "Signature"
-        # return render_template("signature/signatures.html", subscriptions=signatures)
+        return render_template("signature/signatures.html", subscriptions=subscriptions)
     else:
-        return "Signature"
+        return render_template("signature/signature_search.html")
 
 
 @signature_bp.route("/signature/<signature_id>/", methods=["GET",])
 def get_signature(signature_id):
-    return "Signature"
+    subscription = SIGNATURE.get_signature(signature_id)
+
+    if subscription is None:
+        return render_template("signature/response.html", response="error",
+                               message="Erro durante busca da assinatura.")
+
+    return render_template("signature/signature.html", subscription=subscription)

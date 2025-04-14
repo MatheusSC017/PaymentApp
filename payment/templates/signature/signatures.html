@@ -1,54 +1,39 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Detalhes da Assinatura</title>
+    <title>Assinaturas - Detalhes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="client-container">
-        <h1 class="page-title">Dados da Assinatura</h1>
+        <h1 class="page-title">Detalhes das Assinaturas</h1>
 
+        {% for subscription in subscriptions.results %}
         <div class="card wide-card">
             <div class="info-row">
-                <p><strong>ID:</strong> {{ subscription.id }}</p>
-                <p><strong>Versão:</strong> {{ subscription.version }}</p>
-                <p><strong>Application ID:</strong> {{ subscription.application_id }}</p>
-                <p><strong>Collector ID:</strong> {{ subscription.collector_id }}</p>
-                <p><strong>Preapproval Plan ID:</strong> {{ subscription.preapproval_plan_id }}</p>
-                <p><strong>Referência Externa:</strong> {{ subscription.external_reference }}</p>
+                <p><strong>ID do Plano:</strong> {{ subscription.preapproval_plan_id }}</p>
                 <p><strong>Motivo:</strong> {{ subscription.reason }}</p>
+                <p><strong>Referência Externa:</strong> {{ subscription.external_reference }}</p>
+                <p><strong>Email do Pagador:</strong> {{ subscription.payer_email or 'Não informado' }}</p>
+                <p><strong>ID do Cartão:</strong> {{ subscription.card_token_id or subscription.card_id or 'Não informado' }}</p>
                 <p><strong>Status:</strong> {{ subscription.status }}</p>
-                <p><strong>URL de Retorno:</strong> <a href="{{ subscription.back_url }}" target="_blank">Voltar</a></p>
-                <p><strong>Link de Checkout:</strong> <a href="{{ subscription.init_point }}" target="_blank">Iniciar Assinatura</a></p>
+                <p><strong>URL de Retorno:</strong>
+                    <a href="{{ subscription.back_url }}" target="_blank">{{ subscription.back_url }}</a>
+                </p>
             </div>
 
-            <div class="section-title">Pagamentos Automáticos</div>
+            <div class="section-title">Recorrência Automática</div>
             <div class="info-row">
                 <p><strong>Frequência:</strong> {{ subscription.auto_recurring.frequency }}</p>
                 <p><strong>Tipo de Frequência:</strong> {{ subscription.auto_recurring.frequency_type }}</p>
-                <p><strong>Início:</strong> {{ subscription.auto_recurring.start_date }}</p>
-                <p><strong>Fim:</strong> {{ subscription.auto_recurring.end_date }}</p>
-                <p><strong>Valor:</strong> {{ subscription.auto_recurring.transaction_amount }} {{ subscription.auto_recurring.currency_id }}</p>
-            </div>
-
-            {% if subscription.auto_recurring.free_trial %}
-            <div class="section-title">Período de Teste Gratuito</div>
-            <div class="info-row">
-                <p><strong>Duração:</strong> {{ subscription.auto_recurring.free_trial.frequency }} {{ subscription.auto_recurring.free_trial.frequency_type }}</p>
-            </div>
-            {% endif %}
-
-            <div class="section-title">Outros Dados</div>
-            <div class="info-row">
-                <p><strong>Payer ID:</strong> {{ subscription.payer_id }}</p>
-                <p><strong>Card ID:</strong> {{ subscription.card_id }}</p>
-                <p><strong>Payment Method ID:</strong> {{ subscription.payment_method_id }}</p>
-                <p><strong>Próximo Pagamento:</strong> {{ subscription.next_payment_date }}</p>
-                <p><strong>Criado em:</strong> {{ subscription.date_created }}</p>
-                <p><strong>Última Modificação:</strong> {{ subscription.last_modified }}</p>
+                <p><strong>Data de Início:</strong> {{ subscription.auto_recurring.start_date }}</p>
+                <p><strong>Data de Término:</strong> {{ subscription.auto_recurring.end_date }}</p>
+                <p><strong>Valor:</strong> {{ subscription.auto_recurring.transaction_amount }}</p>
+                <p><strong>Moeda:</strong> {{ subscription.auto_recurring.currency_id }}</p>
             </div>
         </div>
+        {% endfor %}
     </div>
 </body>
 </html>
