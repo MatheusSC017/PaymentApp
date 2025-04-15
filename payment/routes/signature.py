@@ -1,12 +1,13 @@
-from flask import Blueprint, request, render_template, redirect, url_for
-from payment.signatures.signature_plan import SignaturePlan
-from payment.signatures.signature import Signature, SignatureData
-from payment.clients.card import CardProxy
+from flask import Blueprint, request, render_template
+from payment.integrations.signatures.signature_plan import SignaturePlanProxy
+from payment.integrations.signatures.signature import SignatureProxy
+from payment.models.signature_model import SignatureModel
+from payment.integrations.card import CardProxy
 from datetime import datetime, timezone, timedelta
 
 signature_bp = Blueprint('signature', __name__, template_folder='templates')
-SIGNATURE = Signature()
-SIGNATURE_PLAN = SignaturePlan()
+SIGNATURE = SignatureProxy()
+SIGNATURE_PLAN = SignaturePlanProxy()
 CARD = CardProxy()
 
 
@@ -38,7 +39,7 @@ def register_signature():
         if card_token_id is None:
             return render_template("signature/response.html", response="error", message="Erro durante criação do token de cartão.")
 
-        signature_data = SignatureData(
+        signature_data = SignatureModel(
             plan_id=plan["id"],
             reason=plan["reason"],
             external_reference=data.get("external_reference"),

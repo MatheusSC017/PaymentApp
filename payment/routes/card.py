@@ -1,8 +1,9 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify, redirect, url_for
-from payment.payments.card import Card, PaymentData
-from payment.clients.client import ClientProxy
-from payment.clients.card import CardProxy
+from payment.integrations.payments.card_payment import CardPaymentProxy
+from payment.models.card_payment_model import CardPaymentModel
+from payment.integrations.client import ClientProxy
+from payment.integrations.card import CardProxy
 from time import sleep
 import mercadopago
 import os
@@ -10,7 +11,7 @@ import os
 
 card_bp = Blueprint('card', __name__, template_folder='templates')
 MP_SDK = mercadopago.SDK(os.environ.get("PAYMENT_MP_PRIVATE_KEY"))
-CARD_PAYMENT = Card()
+CARD_PAYMENT = CardPaymentProxy()
 CARD_PROXY = CardProxy()
 CLIENT_PROXY = ClientProxy()
 
@@ -48,7 +49,7 @@ def process_payment():
             print("Invalid parameters")
             return jsonify({'card/error': 'Invalid parameters'}), 400
 
-        payment_data = PaymentData(
+        payment_data = CardPaymentModel(
             float(data["transaction_amount"]), data["token"], data["description"], int(data["installments"]),
             data["payment_method_id"], data["payer"]["email"], data["payer"]["identification"]["type"],
             data["payer"]["identification"]["number"],

@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for
-from payment.clients.client import ClientProxy, Client
+from payment.integrations.client import ClientProxy
+from payment.models.client_model import ClientModel
 from datetime import datetime
 
 
@@ -12,7 +13,7 @@ def register_client():
     if request.method == "POST":
         data = request.form
 
-        client = Client(
+        client = ClientModel(
             email=data.get("email"),
             first_name=data.get("first_name"),
             last_name=data.get("last_name"),
@@ -51,7 +52,7 @@ def update_client(client_id):
     if request.method == "POST":
         data = request.form
 
-        client = Client(
+        client = ClientModel(
             email=data.get("email"),
             first_name=data.get("first_name"),
             last_name=data.get("last_name"),

@@ -1,10 +1,10 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
-from payment.payments.bill import Bill
-from payment.payments.base import PaymentData
+from payment.integrations.payments.bill_payment import BillPaymentProxy
+from payment.models.payment_model import PaymentModel
 
 bill_bp = Blueprint('bill', __name__, template_folder='templates')
-BILL_PAYMENT = Bill()
+BILL_PAYMENT = BillPaymentProxy()
 
 
 @bill_bp.route('/bill/', methods=['POST', ])
@@ -41,7 +41,7 @@ def process_payment():
             print('Invalid parameters')
             return render_template('bill/error.html', error='Invalid parameters', return_link=data['return_link'])
 
-        payment_data = PaymentData(
+        payment_data = PaymentModel(
             float(data["transactionAmount"]), data["description"], "bolbradesco", data["email"],
             data["payerFirstName"], data["payerLastName"], data["identificationType"], data["identificationNumber"],
             data["zipCode"], data["streetName"], data["streetNumber"], data["neighborhood"], data["city"], data["federalUnit"]

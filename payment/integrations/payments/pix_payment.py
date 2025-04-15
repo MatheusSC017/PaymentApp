@@ -1,8 +1,8 @@
-from payment.payments.base import Payment
+from payment.integrations.payments.base_payment import PaymentProxy
 import mercadopago
 
 
-class Bill(Payment):
+class PixPaymentProxy(PaymentProxy):
     def process_payment(self, payment_data, purchase_identification):
         request_options = mercadopago.config.RequestOptions()
         request_options.custom_headers = {

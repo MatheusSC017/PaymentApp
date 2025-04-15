@@ -1,10 +1,10 @@
 from flask.blueprints import Blueprint
 from flask import render_template, request, jsonify
-from payment.payments.pix import Pix
-from payment.payments.base import PaymentData
+from payment.integrations.payments.pix_payment import PixPaymentProxy
+from payment.models.payment_model import PaymentModel
 
 pix_bp = Blueprint('pix', __name__, template_folder='templates')
-PIX_PAYMENT = Pix()
+PIX_PAYMENT = PixPaymentProxy()
 
 
 @pix_bp.route('/pix/', methods=['POST', ])
@@ -41,7 +41,7 @@ def process_payment():
             print('Invalid parameters')
             return render_template('pix/error.html', error='Invalid parameters', return_link=data['return_link'])
 
-        payment_data = PaymentData(
+        payment_data = PaymentModel(
             float(data["transactionAmount"]), data["description"], "pix", data["email"],
             data["payerFirstName"], data["payerLastName"], data["identificationType"], data["identificationNumber"],
             data["zipCode"], data["streetName"], data["streetNumber"], data["neighborhood"], data["city"],

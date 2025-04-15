@@ -1,8 +1,9 @@
 from flask import Blueprint, request, render_template, redirect, url_for
-from payment.signatures.signature_plan import SignaturePlan, AutoRecurring
+from payment.integrations.signatures.signature_plan import SignaturePlanProxy
+from payment.models.auto_recurring_model import AutoRecurringModel
 
 plan_bp = Blueprint('plan', __name__, template_folder='templates')
-SIGNATURE_PLAN = SignaturePlan()
+SIGNATURE_PLAN = SignaturePlanProxy()
 
 
 @plan_bp.route('/plan/register/', methods=['GET', 'POST'])
@@ -10,7 +11,7 @@ def register_plan():
     if request.method == "POST":
         data = request.form
 
-        auto_reccurring = AutoRecurring(
+        auto_reccurring = AutoRecurringModel(
             frequency=data.get("frequency"),
             frequency_type=data.get("frequency_type"),
             repetitions=data.get("repetitions"),
@@ -45,7 +46,7 @@ def update_plan(plan_id):
     if request.method == "POST":
         data = request.form
 
-        auto_reccurring = AutoRecurring(
+        auto_reccurring = AutoRecurringModel(
             frequency=data.get("frequency"),
             frequency_type=data.get("frequency_type"),
             repetitions=data.get("repetitions"),
