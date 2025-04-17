@@ -47,43 +47,119 @@ PAYMENT_MP_PUBLIC_KEY="YOUR MERCADO PAGO PUBLIC KEY"
 
 ## 📡 API Endpoints
 
-All endpoints return appropriate success and error responses. Below is a list of available routes:
+---
 
-### 🔁 General
+### 🔁 Checkout
 
-- GET /
+Below are the main REST endpoints available for each payment method:
 
-Displays a sample checkout page to test Pix, Card, or Boleto payments.
+---
 
-#### 🏦 Pix Payments
+### 🔁 Checkout
 
-- GET /pix/
+- `GET /`  
+  Displays the main checkout page with links to Pix, Boleto, and Card payments.
 
-Renders a form to input Pix payment details.
+---
 
-- POST /pix/process_payment/
+### 🏦 Pix (Instant Payment)
 
-Processes the Pix payment and returns either a QR Code or an error message.
+- `POST /pix/`  
+  Renders the form for Pix payment with encrypted `purchase_identification`.
 
-#### 💸 Boleto Payments
+- `POST /pix/process_payment/`  
+  Processes the Pix payment using the Mercado Pago API.  
+  Returns a base64 QR Code and a copy-and-paste code string.
 
-- GET /bill/
+---
 
-Renders a form to input Boleto payment details.
+### 💸 Boleto (Bank Slip)
 
-- POST /bill/process_payment/
+- `POST /bill/`  
+  Renders the form for Boleto payment with encrypted `purchase_identification`.
 
-Processes the Boleto payment and returns the barcode/QR Code or an error message.
+- `POST /bill/process_payment/`  
+  Processes the Boleto payment and returns the digitable line or an error message.
 
-#### 💳 Card Payments
+---
 
-- GET /card/
+### 💳 Credit Card
 
-Renders a form to input card payment details.
+- `POST /card/`  
+  Renders the form for credit card payment with encrypted `purchase_identification`.
 
-- POST /card/process_payment/
+- `POST /card/process_payment/`  
+  Processes the card payment and returns the transaction status (approved, rejected, etc.).
 
-Processes the card payment and returns the transaction result or an error message.
+- `GET /card/payment_successful/`  
+  Success page for approved card payments.
+
+- `GET /card/payment_error/`  
+  Error page for rejected card payments.
+
+- `GET | POST /card/register/`  
+  Registers a new card for an existing customer.
+
+- `GET /card/<customer_id>/<card_id>/`  
+  Retrieves information for a specific saved card.
+
+- `POST /card/<customer_id>/<card_id>/`  
+  Updates information for a saved card.
+
+- `GET /card/<customer_id>/<card_id>/delete/`  
+  Deletes a saved card.
+
+- `GET | POST /card/search/`  
+  Searches for saved cards using the customer's email.
+
+---
+
+### 👤 Clients
+
+- `GET | POST /client/register/`  
+  Registers a new client (customer).
+
+- `GET | POST /client/<client_id>/update/`  
+  Updates an existing client’s information.
+
+- `GET | POST /client/search/`  
+  Searches for clients by email.
+
+- `GET /client/<client_id>/`  
+  Retrieves details of a specific client.
+
+---
+
+### 📅 Subscription Plans
+
+- `GET | POST /plan/register/`  
+  Registers a new recurring subscription plan.
+
+- `GET | POST /plan/<plan_id>/update/`  
+  Updates an existing subscription plan.
+
+- `GET /plan/`  
+  Lists all available subscription plans.
+
+- `GET /plan/<plan_id>/`  
+  Retrieves information for a specific subscription plan.
+
+---
+
+### 🔄 Subscription Signatures
+
+- `GET | POST /signature/register/`  
+  Registers a new subscription (signature) under an existing plan using card data.
+
+- `GET | POST /signature/`  
+  Searches for all active subscriptions by the payer's email.
+
+- `GET /signature/<signature_id>/`  
+  Retrieves detailed information for a specific subscription.
+
+---
+
+> 🛡️ **Note:** All endpoints for payment use encrypted `purchase_identification` and secure hash validation with `x-idempotency-key`, ensuring data integrity and preventing duplicate charges.
 
 ### 🧠 How It Works
 
